@@ -9,17 +9,17 @@ public class ReturnObject<T> {
         this.obj = object;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    private int code;
+    private String code;
     private T obj;
-    public ReturnObject(int code, T object)
+    public ReturnObject(String  code, T object)
     {
         this.obj = object;
         this.code = code;
