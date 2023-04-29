@@ -9,7 +9,7 @@ public class Global {
     public static final int FIND = 101; //找回
     public static final int MODIFY = 102; //修改密码
 
-    public static final String TOKEN = "NO_TOKEN";
+    public static final String NO_TOKEN = "0";
 
     public static final String TOKEN_BUCKET_KEY = "token_bucket";//令牌桶key
 

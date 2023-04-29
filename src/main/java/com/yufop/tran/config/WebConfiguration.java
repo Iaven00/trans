@@ -1,7 +1,6 @@
 package com.yufop.tran.config;
 
 
-import com.yufop.tran.Interceptor.LoginInterceptor;
 import com.yufop.tran.Interceptor.TokenBucketIntercepter;
 import com.yufop.tran.Interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +32,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                         "/user/login",
                         "/user/register"
                 ).addPathPatterns("/user/**");
-        registry.addInterceptor(new LoginInterceptor()) //session验证拦截
-                .excludePathPatterns(
-                        "/user/login",
-                        "/user/register"
-                )
-                .addPathPatterns("/user/**");
+
         registry.addInterceptor(tokenBucketIntercepter) // token令牌流量拦截
                 .excludePathPatterns(
                         "/**/*.js",
