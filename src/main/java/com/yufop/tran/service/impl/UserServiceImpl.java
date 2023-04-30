@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         public User registerUser(User user) {
             // 判断是否已存在该用户
             UserExample userExample = new UserExample();
-            userExample.createCriteria().andEmailEqualTo(user.getEmail());
+            userExample.createCriteria().andUsernameEqualTo(user.getUsername());
             List<User> userList = userMapper.selectByExample(userExample);
             if (!userList.isEmpty())
             {
