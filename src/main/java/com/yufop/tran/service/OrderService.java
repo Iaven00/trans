@@ -19,6 +19,6 @@ public interface OrderService {
 
     int delete_order(int order_id);
 
-
+    int change_state(int orderId,String state);
 
 }

@@ -3,7 +3,10 @@ package com.yufop.tran.mapper;
 import com.yufop.tran.pojo.table.Order;
 import com.yufop.tran.pojo.table.OrderExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 
 public interface OrderMapper {
     /**

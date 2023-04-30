@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.yufop.tran.util.Global.FAIL;
+import static com.yufop.tran.util.Global.SUCCESS;
+
 
 @Service
 @Repository
@@ -49,5 +52,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int delete_order(int order_id) {
         return orderMapper.deleteByPrimaryKey(order_id);
+    }
+
+    @Override
+    public int change_state(int orderId, String state) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria().andIdEqualTo(orderId);
+        Order order = new Order();
+        order.setState(state);
+        if(orderMapper.updateByExampleSelective(order,orderExample)>0){
+            return SUCCESS;
+        }
+        return FAIL;
     }
 }
