@@ -5,8 +5,6 @@
           style="height: 100vh"
           default-active="1"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
@@ -22,15 +20,15 @@
           <i class="el-icon-s-promotion"></i>
           <span slot="title">新增订单</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="curpage=2">
+        <el-menu-item index="2" v-if="user.identity==1" @click="curpage_2()">
           <i class="el-icon-s-check"></i>
           <span slot="title">订单管理</span>
         </el-menu-item>
-        <el-menu-item index="3" @click="curpage=3">
+        <el-menu-item index="3" v-if="user.identity==1" @click="curpage=3">
           <i class="el-icon-menu"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
-        <el-menu-item index="4" v-if="role==0" @click="curpage=4">
+        <el-menu-item index="4" v-if="user.identity==0" @click="curpage_4()">
           <i class="el-icon-s-check"></i>
           <span slot="title">订单查询</span>
         </el-menu-item>
@@ -42,6 +40,7 @@
         <el-popover
             placement="bottom"
             title="个人信息"
+
             width="300"
             trigger="click"
             content="将来放关于用户的信息。"
@@ -59,24 +58,39 @@
             欢迎回来！<span style="color: #55ab41">{{
               user.username
             }}</span>
-            <span id="logout" @click="logout">注销</span>
           </div>
-          <div v-if="!check">
-            <a
-                style="
-                    color: #55ab41;
-                    margin-right: 148px;
-                    text-decoration: none;
-                  "
-                href="/login"
-            >对不起,请前往登录</a
-            >
-            <a
-                style="color: #55ab41; text-decoration: none"
-                href="/register"
-            >注册</a
-            >
+          <div v-if="user.identity==0">
+            用户身份：<span style="color: orange;font-weight: bolder">
+              普通用户
+            </span>
           </div>
+          <div v-if="user.identity==1">
+            用户身份：<span style="color: red;font-weight: bolder">
+              后台管理员
+            </span>
+          </div>
+          <div >
+            <span @click="logout()" style="color: green;font-weight: bolder">
+              注销
+            </span>
+          </div>
+
+<!--          <div v-if="!check">-->
+<!--            <a-->
+<!--                style="-->
+<!--                    color: #55ab41;-->
+<!--                    margin-right: 148px;-->
+<!--                    text-decoration: none;-->
+<!--                  "-->
+<!--                href="/login"-->
+<!--            >对不起,请前往登录</a-->
+<!--            >-->
+<!--            <a-->
+<!--                style="color: #55ab41; text-decoration: none"-->
+<!--                href="/register"-->
+<!--            >注册</a-->
+<!--            >-->
+<!--          </div>-->
         </el-popover>
 <!--        <div style="background-color: gray;height: 7vh"></div>-->
       </el-header>
@@ -112,7 +126,6 @@
         </div>
         </div>
 
-
 <!--        下单-->
         <div v-if="curpage==1" style="width: 100%;padding: 0px" >
           <div >
@@ -124,11 +137,11 @@
                 </div>
 
                 <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                  <el-form-item label="寄件人姓名" prop="send_name">
-                    <el-input v-model="ruleForm.send_name" style="width: 200px;float: left"></el-input>
+                  <el-form-item label="寄件人姓名" prop="sendname">
+                    <el-input v-model="ruleForm.sendname" style="width: 200px;float: left"></el-input>
                   </el-form-item>
-                  <el-form-item label="手机号"  prop="send_phone">
-                    <el-input style="width: 200px;float: left" v-model="ruleForm.send_phone"></el-input>
+                  <el-form-item label="手机号"  prop="sendphone">
+                    <el-input style="width: 200px;float: left" v-model="ruleForm.sendphone"></el-input>
                   </el-form-item>
                   <el-form-item label="寄出地区" prop="setout" >
                     <el-col :span="11">
@@ -142,8 +155,8 @@
                     </el-col >
                     <el-col :span="11">
                       <el-form-item label="发货日期" required>
-                        <el-form-item prop="create_time">
-                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.create_time" style="width: 120px;"></el-date-picker>
+                        <el-form-item prop="createtime">
+                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.createtime" style="width: 120px;"></el-date-picker>
                         </el-form-item>
                       </el-form-item>
                     </el-col>
@@ -175,11 +188,11 @@
                   <span class="" style="margin-left: 10px;line-height: 30px">收方信息</span>
                 </div>
                 <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                  <el-form-item label="收件人姓名" prop="rec_name">
-                    <el-input v-model="ruleForm.rec_name" style="width: 200px;float: left"></el-input>
+                  <el-form-item label="收件人姓名" prop="recname">
+                    <el-input v-model="ruleForm.recname" style="width: 200px;float: left"></el-input>
                   </el-form-item>
-                  <el-form-item label="手机号"  prop="rec_phone">
-                    <el-input style="width: 200px;float: left" v-model="ruleForm.rec_phone"></el-input>
+                  <el-form-item label="手机号"  prop="recphone">
+                    <el-input style="width: 200px;float: left" v-model="ruleForm.recphone"></el-input>
                   </el-form-item>
                   <el-form-item label="收货地区" prop="destination" >
                     <el-col :span="11">
@@ -192,8 +205,8 @@
                       </el-cascader>
                     </el-col >
                   </el-form-item>
-                  <el-form-item label="详细收货地"  prop="rec_address">
-                    <el-input style="float: left" v-model="ruleForm.rec_address"></el-input>
+                  <el-form-item label="详细收货地"  prop="recaddress">
+                    <el-input style="float: left" v-model="ruleForm.recaddress"></el-input>
                   </el-form-item>
                   <el-form-item label="备注" prop="content">
                     <el-input type="textarea" :rows="6" resize='none' v-model="ruleForm.content"></el-input>
@@ -203,6 +216,275 @@
             </div>
           </div>
         </div>
+<!--        管理员用-订单管理-->
+        <div v-if="curpage==2" style="width: 100%;padding: 0px" >
+          <!--          寄出信息表格-->
+          <div style="height: 80vh;border-bottom: 3px dotted #eee">
+            <div style="display: flex;height: 40px;margin-bottom: 10px">
+              <span class="r-g-index r-g-index-1" style="margin-left: 20px">管</span>
+              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">订单管理</span>
+            </div>
+            <div style="">
+              <el-table
+                  :data="all_tableData.filter(data => !search || data.recname.toLowerCase().includes(search.toLowerCase()))"
+                  style="width: 80%;margin-left: 3vw"
+                  height="72vh"
+                  :row-class-name="tableRowClassName">
+                <el-table-column
+                    prop="recname"
+                    label="收件人"
+                    width="100">
+                </el-table-column>
+                <el-table-column
+                    prop="recphone"
+                    label="联系方式"
+                    width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="destination"
+                    label="收货地址">
+                </el-table-column>
+                <el-table-column
+                    prop="type"
+                    label="运输方式">
+                </el-table-column>
+                <el-table-column
+                    prop="esttime"
+                    label="预计时间">
+                </el-table-column>
+                <el-table-column
+                    prop="state"
+                    label="当前状态"
+                    width="100"
+                    :filters="[{ text: '未发货', value: '未发货' }, { text: '运输中', value: '运输中' },
+                    { text: '待签收', value: '待签收' },{ text: '已完成', value: '已完成' }
+                    ]"
+                    :filter-method="filterTag"
+                    filter-placement="bottom-end">
+                  <template slot-scope="scope">
+                    <el-tag
+                        v-if="scope.row.state === '未发货'"
+                        :type="'info'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '运输中'"
+                        :type="'primary'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '待签收'"
+                        :type="'warning'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '已完成'"
+                        :type="'success'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot="header" slot-scope="scope">
+                    <el-input
+                        v-model="search"
+                        size="mini"
+                        placeholder="输入关键字搜索"/>
+                  </template>
+                  <template slot-scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+                    <el-button
+                        size="mini"
+                        type="primary"
+                        @click="handleState(scope.$index, scope.row)">修改状态</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+
+
+        </div>
+
+<!--        用户用-订单查询-->
+        <div v-if="curpage==4" style="width: 100%;padding: 0px" >
+<!--          寄出信息表格-->
+          <div style="height: 40vh;border-bottom: 3px dotted #eee">
+            <div style="display: flex;height: 40px;margin-bottom: 10px">
+              <span class="r-g-index r-g-index-1" style="margin-left: 20px">寄</span>
+              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我寄出的</span>
+            </div>
+            <div style="">
+              <el-table
+                  :data="send_tableData.filter(data => !search || data.recname.toLowerCase().includes(search.toLowerCase()))"
+                  style="width: 80%;margin-left: 3vw"
+                  height="30vh"
+                  :row-class-name="tableRowClassName">
+                <el-table-column
+                    prop="recname"
+                    label="收件人"
+                    width="100">
+                </el-table-column>
+                <el-table-column
+                    prop="recphone"
+                    label="联系方式"
+                    width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="destination"
+                    label="收货地址">
+                </el-table-column>
+                <el-table-column
+                    prop="type"
+                    label="运输方式">
+                </el-table-column>
+                <el-table-column
+                    prop="esttime"
+                    label="预计时间">
+                </el-table-column>
+                <el-table-column
+                    prop="state"
+                    label="当前状态"
+                    width="100">
+                  <template slot-scope="scope">
+                    <el-tag
+                        v-if="scope.row.state === '未发货'"
+                        :type="'info'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '运输中'"
+                        :type="'primary'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '待签收'"
+                        :type="'warning'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '已完成'"
+                        :type="'success'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot="header" slot-scope="scope">
+                    <el-input
+                        v-model="search"
+                        size="mini"
+                        placeholder="输入关键字搜索"/>
+                  </template>
+                  <template slot-scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+                    <el-button
+                        v-if="scope.row.state === '待签收'"
+                        size="mini"
+                        type="success"
+                        @click="handleDelete(scope.$index, scope.row)">签收</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+<!--          收货信息表格-->
+          <div style="margin-top: 2vh">
+            <div style="display: flex;height: 40px;margin-bottom: 10px">
+              <span class="r-g-index r-g-index-2" style="margin-left: 20px">收</span>
+              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我收到的</span>
+            </div>
+            <div style="">
+              <el-table
+                  :data="rec_tableData.filter(data => !search_2 || data.sendname.toLowerCase().includes(search_2.toLowerCase()))"
+                  style="width: 80%;margin-left: 3vw"
+                  height="30vh"
+                  :row-class-name="tableRowClassName">
+                <el-table-column
+                    prop="sendname"
+                    label="寄件人"
+                    width="100">
+                </el-table-column>
+                <el-table-column
+                    prop="sendphone"
+                    label="联系方式"
+                    width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="setout"
+                    label="寄件地址">
+                </el-table-column>
+                <el-table-column
+                    prop="type"
+                    label="运输方式">
+                </el-table-column>
+                <el-table-column
+                    prop="esttime"
+                    label="预计时间">
+                </el-table-column>
+                <el-table-column
+                    prop="state"
+                    label="当前状态"
+                    width="100">
+                  <template slot-scope="scope">
+                    <el-tag
+                        v-if="scope.row.state === '未发货'"
+                        :type="'info'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '运输中'"
+                        :type="'primary'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '待签收'"
+                        :type="'warning'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                    <el-tag
+                        v-if="scope.row.state === '已完成'"
+                        :type="'success'"
+                        disable-transitions>{{scope.row.state}}</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot="header" slot-scope="scope">
+                    <el-input
+                        v-model="search_2"
+                        size="mini"
+                        placeholder="输入关键字搜索"/>
+                  </template>
+                  <template slot-scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+                    <el-button
+                        v-if="scope.row.state === '待签收'"
+                        size="mini"
+                        type="success"
+                        @click="handleStatus(scope.$index, scope.row)">签收</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+
+        </div>
+
+        <el-dialog
+            title="提示"
+            :visible.sync="changeState"
+            width="30%">
+          <el-select v-model="tempState" placeholder="请选择状态">
+            <el-option
+                v-for="item in state_options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                @change="stateChange"
+            >
+            </el-option>
+          </el-select>
+          <span slot="footer" class="dialog-footer">
+    <el-button @click="changeState = false">取 消</el-button>
+    <el-button type="primary" @click="ensureState()">确 定</el-button>
+  </span>
+        </el-dialog>
+
       </el-main>
     </el-container>
   </el-container>
@@ -210,46 +492,142 @@
 
 <script>
 import { regionData,codeToText } from 'element-china-area-data'
+import axios from "axios";
 export default {
   name: "center.vue",
   data(){
     return{
-      check:false,
+      state_options: [{
+        value: '未发货',
+        label: '未发货'
+      }, {
+        value: '运输中',
+        label: '运输中'
+      }, {
+        value: '待签收',
+        label: '待签收'
+      }, {
+        value: '已完成',
+        label: '已完成'
+      }, ],
+      tempid:'',
+      tempState: '',
+      changeState:false,
+      user:{},
+      search: '',
+      search_2: '',
+      send_tableData: [
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'未发货',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'运输中',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'已完成',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        }
+      ],
+      all_tableData:[],
+      rec_tableData: [
+        {
+          sendname:'禹浩男喵',
+          sendphone: "18224426057",
+          setout:"北京市海淀区",
+          type:'陆运',
+          state:'未发货',
+        },
+        {
+          sendname:'ZLG',
+          sendphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'运输中',
+        },
+        {
+          sendname:'ZLG',
+          sendphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        },
+        {
+          sendname:'ZLG',
+          sendphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'已完成',
+        },
+        {
+          sendname:'ZLG',
+          sendphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        }
+      ],
+      check:true,
       role:0,
       options: regionData,
       curpage:1,
-
+      place_1:'',
+      place_2:'',
       ruleForm: {
       },
       rules: {
-        send_name: [
+        sendname: [
           { required: true, message: '请输入寄件人姓名', trigger: 'blur' },
         ],
-        send_phone: [
+        sendphone: [
           { required: true, message: '请选择寄件人联系方式', trigger: 'blur' }
         ],
-        create_time: [
-          { type: 'date', required: true, message: '请选择发货日期', trigger: 'blur' }
+        createtime: [
+          { required: true, message: '请选择发货日期', trigger: 'blur' }
         ],
         setout: [
-          {required: true, message: '请选择发货地', trigger: 'change' }
+          {required: true, message: '请选择发货地', trigger: 'blur' }
         ],
         destination: [
-          {required: true, message: '请选择收货地', trigger: 'change' }
+          {required: true, message: '请选择收货地', trigger: 'blur' }
         ],
         address: [
           { required: true, message: '请填写发货地址', trigger: 'blur' }
         ],
-        rec_address: [
+        recaddress: [
           { required: true, message: '请填写收货地址', trigger: 'blur' }
         ],
         weight: [
           { required: true, message: '请填写货物重量', trigger: 'blur' }
         ],
-        rec_name: [
+        recname: [
           { required: true, message: '请填写收件人姓名', trigger: 'blur' }
         ],
-        rec_phone: [
+        recphone: [
           { required: true, message: '请填写收件人手机', trigger: 'blur' }
         ],
       },
@@ -257,32 +635,179 @@ export default {
     }
   },
   created() {
+    this.user = JSON.parse(window.localStorage.getItem("user"));
+    this.token= JSON.parse(window.localStorage.getItem("token"));
+    this.getSend();
+    this.getRec();
+    this.getAll();
     // this.bodyScale()
   },
   methods: {
+    ensureState(){
+      if(this.tempState!=''){
+        let _this=this;
+        axios
+            .get("http://localhost:8088/manage/state_change?&orderId="+ this.tempid+"&state="+this.tempState, {
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            })
+            .then(function (ressponse) {
+              if(ressponse.data==0){
+                _this.$message.error({
+                  message: "修改失败！请重试",
+                });
+              }else{
+                _this.$message.success({
+                  message: "修改成功！",
+                });
+                setTimeout(() => {
+                  //设置延迟执行
+                  _this.getAll();
+                  _this.changeState=false;
+                }, 1000);
+              }
+            })
+      }
+    },
+
+    stateChange(){
+    },
+    handleState(index,row){
+     this.changeState=true;
+     this.tempid=row.id;
+    },
+    filterTag(value, row) {
+      return row.state === value;
+    },
+
+    curpage_2(){
+      this.curpage=2;
+      this.getAll()
+
+    },
+    curpage_4(){
+      this.curpage=4;
+      this.getSend();
+      this.getRec();
+    },
+    submitForm(){
+      let _this = this;
+      this.$refs.ruleForm.validate((valid)=>{
+        if(valid){
+          var format =new FormData();
+          format.append("userid",this.user.id)
+          format.append("createtime",this.ruleForm.createtime)
+          format.append("setout",this.place_1)
+          format.append("destination",this.place_2)
+          format.append("type",this.ruleForm.type)
+          format.append("state",'未发货')
+          format.append("weight",this.ruleForm.weight)
+          format.append("sendphone",this.ruleForm.sendphone)
+          format.append("recphone",this.ruleForm.recphone)
+          format.append("sendname",this.ruleForm.sendname)
+          format.append("recname",this.ruleForm.recname)
+          format.append("content",this.ruleForm.content)
+          format.append("sendaddress",this.ruleForm.address)
+          format.append("recaddress",this.ruleForm.recaddress)
+          axios
+              .post("http://localhost:8088/order/addOrder", format , {
+                headers: { "Content-Type": "application/x-www-form-urlencoded",
+                  "token":this.token
+                },
+              })
+              .then(function (ressponse) {
+                _this.resetForm();
+                _this.$message.success({
+                  message: "录入成功！",
+                });
+              })
+        }else{
+          _this.$message.error({
+            message: "录入失败，请检查表单！",
+          });
+        }
+
+      })
+
+    },
+
+    getSend(){
+      var _this=this;
+      this.send_tableData=[]
+      console.log(this.user)
+      axios
+          .get("http://localhost:8088/order/selectBysp?&phone="+ this.user.phone, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            _this.send_tableData=ressponse.data
+          })
+      // console.log(this.send_tableData)
+    },
+    getAll(){
+      var _this=this;
+      this.all_tableData=[]
+      console.log(this.user)
+      axios
+          .get("http://localhost:8088/order/selectAll", {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            _this.all_tableData=ressponse.data
+          })
+      // console.log(this.send_tableData)
+    },
+
+    getRec(){
+      var _this=this;
+      this.rec_tableData=[]
+      axios
+          .get("http://localhost:8088/order/selectByrp?&phone="+ this.user.phone, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            _this.rec_tableData=ressponse.data;
+          })
+    },
+
+    logout(){
+      var _this = this;
+      window.localStorage.removeItem("user");
+      _this.$message({
+        message: "注销成功",
+        type: "success",
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+
+    },
+
+    tableRowClassName({row, rowIndex}) {
+      if (rowIndex === 1) {
+        return 'warning-row';
+      } else if (rowIndex === 3) {
+        return 'success-row';
+      }
+      return '';
+    },
       handleChange (value) {
         this.ruleForm.selectedOptions=''
-        let place=''
+        this.place_1=''
         for(let i =0;i<value.length;i++){
-          place=place+codeToText[value[i]]
+          this.place_1=this.place_1+codeToText[value[i]]
         }
       },
     handleChange_2 (value) {
-      this.ruleForm.selectedOptions_2=''
-      let place=''
+      this.ruleForm.selectedOptions2=''
+      this.place_2=''
       for(let i =0;i<value.length;i++){
-        place=place+codeToText[value[i]]
+        this.place_2=this.place_2+codeToText[value[i]]
       }
     },
       resetForm(){
-      this.ruleForm.POLICY_TITLE= '';
-      this.ruleForm.POLICY_GRADE= '';
-      this.ruleForm. PUB_AGENCY= '';
-      this.ruleForm.PUB_TIME= '';
-      this.ruleForm. POLICY_TYPE= '';
-      this.ruleForm.POLICY_BODY= '';
-      this.ruleForm. PROVINCE= '';
-      this.ruleForm.POLICY_SOURCE= '';
+        this.ruleForm=[]
+        this.place_1=''
+        this.place_2=''
     },
     bodyScale() {
       let t = window.devicePixelRatio   // 获取下载的缩放 125% -> 1.25    150% -> 1.5
@@ -301,8 +826,23 @@ export default {
     handleEdit(index, row) {
       console.log(index, row);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleStatus(index, row) {
+      this.$prompt('请输入邮箱', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: '邮箱格式不正确'
+      }).then(({ value }) => {
+        this.$message({
+          type: 'success',
+          message: '你的邮箱是: ' + value
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
     }
   },
 }

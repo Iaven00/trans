@@ -10,7 +10,7 @@ const Center= () =>import('../components/center')
 const routes = [
     { path: '/', component: Login,meta:{requireAuth:false}},
     { path: '/login', component: Login,meta:{requireAuth:false} },
-    { path: '/center', component: Center,meta:{requireAuth:false} },
+    { path: '/center', component: Center,meta:{requireAuth:true} },
     { path: '/*', redirect: '/' }  // 当匹配不上时重定向的到首页
 ]
 
@@ -24,11 +24,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     var _this = this;
     if(to.meta.requireAuth ){
-        if(JSON.parse(window.localStorage.getItem("admin_access"))==null){
+        if(JSON.parse(window.localStorage.getItem("user"))==null){
             console.log('没有登录')
-            router.push({path: '/ad_login',query: {}})
+            router.push({path: '/login',query: {}})
             next()
         } else {
+            console.log('登了')
             // router.push({path: to.fullPath})
             next()
         }

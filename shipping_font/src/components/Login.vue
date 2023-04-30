@@ -5,9 +5,9 @@
         <div class="big-contain" key="bigContainLogin" v-if="isLogin">
           <div class="btitle">账户登录</div>
           <div class="bform">
-            <input type="email" placeholder="邮箱" v-model="form.useremail">
+            <input type="email" placeholder="邮箱" v-model="form.email">
             <span class="errTips" v-if="emailError">* 邮箱填写错误 *</span>
-            <input type="password" placeholder="密码" v-model="form.userpwd">
+            <input type="password" placeholder="密码" v-model="form.password">
             <span class="errTips" v-if="emailError">* 密码填写错误 *</span>
           </div>
           <button class="bbutton" @click="login">登录</button>
@@ -15,10 +15,15 @@
         <div class="big-contain" key="bigContainRegister" v-else>
           <div class="btitle">创建账户</div>
           <div class="bform">
-            <input type="text" placeholder="用户名" v-model="form.username">
+            <input type="text" placeholder="用户名" v-model="reg.username">
+            <div style="display: flex">
+              <input type="text" placeholder="邮箱" v-model="reg.email" style="float: left;width: 200px">
+              <el-button size="small" style="width: 100px;margin-left: 20px" @click="codesend()">发送验证码</el-button>
+            </div>
+
             <span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
-            <input type="email" placeholder="邮箱" v-model="form.useremail">
-            <input type="password" placeholder="密码" v-model="form.userpwd">
+            <input type="email" placeholder="验证码" v-model="reg.code">
+            <input type="password" placeholder="密码" v-model="reg.password">
           </div>
           <button class="bbutton" @click="register">注册</button>
         </div>
@@ -46,6 +51,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default{
   name:'login-register',
   data(){
@@ -54,49 +61,84 @@ export default{
       emailError: false,
       passwordError: false,
       existed: false,
-      form:{
+      reg:{
         username:'',
-        useremail:'',
-        userpwd:''
+        email:'',
+        password:'',
+        phone:'',
+        code:'',
+      },
+      form:{
+        email:'',
+        password:''
       }
     }
   },
   methods:{
-    changeType() {
-      this.isLogin = !this.isLogin
-      this.form.username = ''
-      this.form.useremail = ''
-      this.form.userpwd = ''
-    },
-    login() {
-      const self = this;
-      if (self.form.useremail != "" && self.form.userpwd != "") {
-        self.$axios({
-          method:'post',
-          url: 'http://127.0.0.1:10520/api/user/login',
-          data: {
-            email: self.form.useremail,
-            password: self.form.userpwd
-          }
-        })
-            .then( res => {
-              switch(res.data){
-                case 0:
-                  this.$message({
-                    message: '登陆成功！',
-                    type: 'success'
-                  });
-                  break;
-                case -1:
-                  this.emailError = true;
-                  break;
-                case 1:
-                  this.passwordError = true;
-                  break;
+    codesend(){
+      var _this=this;
+      if(this.reg.email!=''){
+        _this.$message({
+          message: "发送中请稍后",
+          type: "primary",
+        });
+        axios
+            .get("http://localhost:8088/mail/code?&email="+ this.reg.email, {
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            })
+            .then(function (ressponse) {
+              if (ressponse.data.code != 0) {
+                _this.$message({
+                  message: "发送成功",
+                  type: "success",
+                });
+              }else{
+                _this.$message({
+                  message: "发送失败，请检查邮箱后重试",
+                  type: "warning",
+                });
               }
             })
-            .catch( err => {
-              console.log(err);
+      }else {
+        _this.$message.error({
+          message: "请输入邮箱！",
+        });
+      }
+    },
+    changeType() {
+      this.isLogin = !this.isLogin
+      // this.form.username = ''
+      this.form.email = ''
+      this.form.password = ''
+    },
+    login() {
+      var format =new FormData();
+      format.append("email",this.form.email)
+      format.append("password",this.form.password)
+      const self = this;
+      if (self.form.email != "" && self.form.password != "") {
+        let _this = this;
+        axios
+            .post("http://localhost:8088/user/login", format , {
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            })
+            .then(function (ressponse) {
+              if (ressponse.data.code != "0") {
+                localStorage.setItem("token", JSON.stringify(ressponse.data.code));
+                localStorage.setItem("user", JSON.stringify(ressponse.data.object));
+                _this.$message({
+                  message: "登录成功",
+                  type: "success",
+                });
+                setTimeout(() => {
+                  //设置延迟执行
+                  _this.$router.replace({ path: "/center" });
+                }, 1000);
+              } else {
+                _this.$message.error({
+                  message: "登录失败",
+                });
+              }
             })
       } else{
         this.$message({
@@ -107,14 +149,14 @@ export default{
     },
     register(){
       const self = this;
-      if(self.form.username != "" && self.form.useremail != "" && self.form.userpwd != ""){
+      if(self.form.username != "" && self.form.email != "" && self.form.password != ""){
         self.$axios({
           method:'post',
           url: 'http://127.0.0.1:10520/api/user/add',
           data: {
             username: self.form.username,
-            email: self.form.useremail,
-            password: self.form.userpwd
+            email: self.form.email,
+            password: self.form.password
           }
         })
             .then( res => {

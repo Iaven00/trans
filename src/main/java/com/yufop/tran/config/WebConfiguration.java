@@ -30,7 +30,8 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)  //token登录验证拦截
                 .excludePathPatterns(
                         "/user/login",
-                        "/user/register"
+                        "/user/register",
+                        "/mail/code"
                 ).addPathPatterns("/user/**");
 
         registry.addInterceptor(tokenBucketIntercepter) // token令牌流量拦截

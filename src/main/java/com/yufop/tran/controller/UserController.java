@@ -33,7 +33,7 @@ public class UserController {
     public ReturnObject<User> loginUser(String email,
                                           String password,
                                           HttpSession session, HttpServletResponse response){
-
+        System.out.println(email);
         User user = userService.loginUser(email,password);
         ReturnObject<User> ret = new ReturnObject<>(NO_TOKEN,user);
         if(user==null){
