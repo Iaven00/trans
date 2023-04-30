@@ -101,25 +101,25 @@
           <div style="display:flex; flex-direction: row;justify-content:center">
             <div class="bock01" name="Slider-1" style="margin-right: 3%;margin-left: 3%">
               <i><img src="~@/assets/icon1.png" alt="个人政策"></i>
-              <h3>个人办事</h3>
+              <h3>开发中。。</h3>
               <p>
               </p>
             </div>
             <div class="bock01" name="Slider-1"style="margin-right: 3%;margin-left: 3%">
               <i><img src="~@/assets/icon2.png" alt="最新政策" ></i>
-              <h3>最新政策</h3>
+              <h3>待发货：xxx</h3>
               <p>
               </p>
             </div>
             <div class="bock01" name="Slider-1"style="margin-right: 3%;margin-left: 3%">
               <i><img src="~@/assets/icon3.png" alt="企业政策"></i>
-              <h3>企业政策</h3>
+              <h3>运输中：xxx</h3>
               <p>
               </p>
             </div>
             <div class="bock01" name="Slider-1"style="margin-right: 3%;margin-left: 3%">
               <i><img src="~@/assets/icon4.png" alt="热点政策"></i>
-              <h3>热点政策</h3>
+              <h3>已完成：xxx</h3>
               <p>
               </p>
             </div>
