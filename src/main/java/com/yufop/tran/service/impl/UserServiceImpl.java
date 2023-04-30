@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         public User registerUser(User user) {
             // 判断是否已存在该用户
             UserExample userExample = new UserExample();
-            userExample.createCriteria().andUsernameEqualTo(user.getUsername());
+            userExample.createCriteria().andEmailEqualTo(user.getEmail());
             List<User> userList = userMapper.selectByExample(userExample);
             if (!userList.isEmpty())
             {
@@ -56,9 +56,9 @@ public class UserServiceImpl implements UserService {
         }
 
         @Override
-        public User loginUser(String username, String password) {
+        public User loginUser(String email, String password) {
             UserExample userExample = new UserExample();
-            userExample.createCriteria().andPasswordEqualTo(password).andEmailEqualTo(username);
+            userExample.createCriteria().andPasswordEqualTo(password).andEmailEqualTo(email);
             List<User> users =userMapper.selectByExample(userExample);
             if(users!=null){
                 if(users.size()==1) {return users.get(0);}
