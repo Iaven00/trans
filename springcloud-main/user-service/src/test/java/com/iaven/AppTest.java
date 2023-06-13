@@ -1,14 +1,19 @@
 package com.iaven;
 
-import static org.junit.Assert.assertTrue;
 
-import com.iaven.pojo.table.User;
+import com.iaven.mapper.OrderMapper;
+import com.iaven.pojo.table.Order;
 import com.iaven.service.MailService;
+import com.iaven.service.OrderService;
 import com.iaven.service.UserService;
+import org.mockito.internal.matchers.Or;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 /**
  * Unit test for simple App.
  */
@@ -19,13 +24,20 @@ public class AppTest
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    UserService userService;
     /**
      * Rigorous Test :-)
      */
     @Test
     public void contextLoads()
     {
-        mailService.sendCodeType("1245325661@qq.com",100);
-        System.out.println(mailService.getCode("1245325661@qq.com",100));
+        List<Order> orders = orderService.list_orders();
+        System.out.println(orders.size());
+        System.out.println(userService.getUserById(1).toString());
     }
 }

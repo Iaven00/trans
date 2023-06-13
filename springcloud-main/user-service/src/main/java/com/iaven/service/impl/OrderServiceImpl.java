@@ -7,6 +7,7 @@ import com.iaven.service.OrderService;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int delete_order(int order_id) {
-        return orderMapper.deleteByPrimaryKey(order_id);
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria().andIdEqualTo(order_id);
+        return orderMapper.deleteByExample(orderExample);
     }
 
     @Override
