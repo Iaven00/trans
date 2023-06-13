@@ -9,7 +9,6 @@ import com.iaven.utils.User;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +37,11 @@ public class Authcontroller {
      */
     @PostMapping("/login")
     @CircuitBreaker(name = "backendA",fallbackMethod = "loginHandler")
-    @Bulkhead(name = "backendA",fallbackMethod = "loginThreadHandler")
     public ReturnObject<User> login(String email, String password) {
         System.out.println("email:"+email+"     pass:"+password);
         ReturnObject<User>  user = service.login(email,password);
         // 登录成功写入token
-        if(user.getCode().compareTo("success") == 0){
+        if(user.getCode().compareTo("S") == 0){
             user.setCode(jwtUtils.createJwt(user.getObject().getUsername()));
         }
         return user;
@@ -77,7 +75,6 @@ public class Authcontroller {
             return false;
         }
         Claim claim = claimmap.get("username");
-        System.out.println("username is "+claim.asString());
         if(claim==null) {
             return false;
         }

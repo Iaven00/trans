@@ -20,25 +20,29 @@ spring:
   cloud:
     gateway:
       routes:
-        # - id: service_1
-        #   uri: lb://eureka-service
-        #   predicates:
-        #     - Path=/support/**
-        #   filters:
-        #     - StripPrefix=1
-        #     - name: RequestRateLimiter #请求数限流 名字不能随便写
-        #       args:
-        #         key-resolver: "#{@ipKeyResolver}"
-        #         redis-rate-limiter.replenishRate: 1
-        #         redis-rate-limiter.burstCapacity: 1
-
-        - id: service_2
+        - id: service_1
           uri: lb://jwtService
           predicates:
             - Path=/auth/**
           filters:
             - StripPrefix=1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
 
+        - id: service_2
+          uri: lb://userservice
+          predicates:
+            - Path=/account/**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
       discovery:
         locator:
           enabled: true # 设置为true 请求路径前可以添加微服务名称 表明gateway开启服务注册和发现的功能，并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，# 这个router将以服务名开头的请求路径转发到对应的服务

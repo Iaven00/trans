@@ -34,7 +34,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         //2.判断当前的请求是否为登录，如果是，直接放行
-        if(request.getURI().getPath().contains("/login")){
+        if(request.getURI().getPath().contains("/login")||request.getURI().getPath().contains("/mail")||request.getURI().getPath().contains("/test")){
             //放行
             System.out.println("登录放行");
             return chain.filter(exchange);
