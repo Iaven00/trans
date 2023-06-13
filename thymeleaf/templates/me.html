@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="robots" content="index, follow">
+
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css?9188" th:href="@{/css/bootstrap.min.css?9188}">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css?8116" th:href="@{/css/style.css?8116}">
+	<link rel="stylesheet" type="text/css" href="./css/animate.min.css?7456" th:href="@{/css/animate.min.css?7456}">
+<!--	<link href='https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap&subset=latin,latin-ext' rel='stylesheet' type='text/css'>-->
+<!--	<link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900&display=swap&subset=latin,latin-ext' rel='stylesheet' type='text/css'>-->
+    <title>me</title>
+
+
+    
+<!-- Analytics -->
+ 
+<!-- Analytics END -->
+    
+</head>
+<body>
+
+
+<!-- Preloader -->
+<div id="page-loading-blocs-notifaction" class="page-preloader"></div>
+<!-- Preloader END -->
+
+
+<!-- Main container -->
+<div class="page-container">
+    
+<!-- bloc-0 -->
+<div class="bloc bg-截屏2022-05-07-2019-53-22 l-bloc " id="bloc-0">
+	<div class="container bloc-sm">
+		<div class="row">
+			<div class="col">
+				<nav th:replace="_fragments :: nav" class="navbar navbar-light row navbar-expand-md nav-invert" role="navigation">
+					<button id="nav-toggle" type="button" class="ui-navbar-toggler navbar-toggler border-0 p-0" data-toggle="collapse" data-target=".navbar-27707" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse navbar-27707">
+						<ul class="site-navigation nav navbar-nav">
+							<li class="nav-item">
+								<a href="loginup.html" th:href="@{/}" class="nav-link a-btn ltc-white">首页</a>
+							</li>
+							<li th:if="${session.nowUser.ifHasRight(1)}" class="nav-item">
+								<a href="contract/draft.html" th:href="@{/toDraft}" class="nav-link  ltc-white">起草合同</a>
+							</li>
+							<li th:if="${session.nowUser.ifHasRight(5)}" class="nav-item">
+								<a href="select.html" th:href="@{/toCounterSign}" class="nav-link  ltc-white">会签合同</a>
+							</li>
+							<li th:if="${session.nowUser.ifHasRight(2)}" class="nav-item">
+								<a href="finalization.html" th:href="@{/toFinalize}" class="nav-link a-btn ltc-white">定稿合同</a>
+							</li>
+							<li th:if="${session.nowUser.ifHasRight(6)}" class="nav-item">
+								<a href="approval.html" th:href="@{/toExamine}" class="nav-link a-btn ltc-white">审批合同</a>
+							</li>
+							<li th:if="${session.nowUser.ifHasRight(7)}" class="nav-item">
+								<a href="sign.html" th:href="@{/toSign}" class="nav-link a-btn ltc-white">签订合同</a>
+							</li>
+						</ul>
+					</div>
+					<a class="navbar-brand mr-0" href="/toMe"> xzx <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></a>
+
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-0 END -->
+
+<!-- bloc-7 -->
+<div class="bloc l-bloc" id="bloc-7">
+	<div class="container bloc-lg">
+		<div class="row">
+			<div class="col-sm-4 text-md-left text-center col-lg-2">
+				<div class="card">
+					<div class="card-body card-body-bloc-7-style">
+						<h6 class="mg-md text-lg-center">
+							其他操作：
+						</h6>
+						<a href="index.html" th:href="@{/toSelectUser}" th:if="${session.nowUser.ifHasRight(20)}" class="btn btn-d btn-lg btn-6-style btn-style-none">权限管理</a>
+						<a href="index.html" th:href="@{/toAddCustomer}" th:if="${session.nowUser.ifHasRight(16)}" class="btn btn-d btn-lg btn-6-style btn-style-none">新增客户</a>
+						<a href="index.html" th:href="@{/toSelectCustomer}" th:if="${session.nowUser.ifHasRight(17)}" class="btn btn-d btn-lg btn-6-style btn-style-none">客户管理</a>
+						<a href="index.html" th:href="@{/toSelectUser}" th:if="${session.nowUser.ifHasRight(13)}" class="btn btn-d btn-lg btn-6-style btn-style-none">用户管理</a>
+						<a v-on:click="getAdmin()" href="#" class="btn btn-d btn-lg btn-6-style btn-style-none">成为管理员</a>
+						<a href="index.html"  th:href="'/toModifyUser/'+${session.nowUser.getUserid()}" class="btn btn-d btn-lg btn-6-style btn-style-none">修改信息</a>
+						<a href="index.html" th:if="${session.nowUser.ifHasRight(20)}" th:href="@{/toLog}" class="btn btn-d btn-lg btn-6-style btn-style-none">日志查询</a>
+						<a v-on:click="deleteCookie()" href="#" class="btn btn-d btn-lg btn-6-style btn-style-none">退出登录</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8 text-md-left text-center col-lg-10">
+				<h3 class="mg-md">
+					欢迎登录，<span th:text="${session.nowUser.username}">xxx</span>。
+				</h3>
+				<h6 class="mg-md">
+					以下是您可进行的工作：
+				</h6>
+				<div class="card">
+					<div class="card-body card-body-style">
+						<div class="row">
+							<div class="col text-lg-center">
+								<h5 class="mg-md">
+									等待分配
+
+								</h5>
+								<h1 class="mg-md h1-style">
+									{{waitingForAssigningNumber}}
+								</h1><a th:href="@{/toselectCNeedAssign}" href="index.html" class="btn btn-lg btn-azure" v-bind:class="waitingForAssigningNumber==0?'disabled' : '' ">{{waitingIndex}}<br></a>
+							</div>
+							<div class="col text-lg-center">
+								<h5 class="mg-md">
+									剩余会签
+								</h5>
+								<h1 class="mg-md h1-style">
+									{{toCountersignNumber}}
+								</h1><a th:href="@{/toSelectContract}" href="index.html" class="btn btn-lg btn-azure" v-bind:class="toCountersignNumber==0?'disabled' : '' ">{{countersignIndex}}<br></a>
+							</div>
+							<div class="col text-lg-center">
+								<h5 class="mg-md">
+									剩余定稿
+
+								</h5>
+								<h1 class="mg-md h1-style">
+									{{toFinalizeNumber}}
+								</h1><a th:href="@{/toSelectContract}" href="index.html" class="btn btn-lg btn-azure" v-bind:class="toFinalizeNumber==0?'disabled' : '' ">{{finalizeIndex}}<br></a>
+							</div>
+							<div class="col text-lg-center">
+								<h5 class="mg-md">
+
+									剩余审批
+								</h5>
+								<h1 class="mg-md h1-style">
+									{{toExamNumber}}
+								</h1><a th:href="@{/toSelectContract}" href="index.html"  class="btn btn-lg btn-azure" v-bind:class="toExamNumber==0?'disabled' : '' ">{{examIndex}}<br></a>
+							</div>
+							<div class="col text-lg-center">
+								<h5 class="mg-md">
+									剩余签订
+
+								</h5>
+								<h1 class="mg-md h1-style">
+									{{toSignNumber}}
+								</h1><a th:href="@{/toSelectContract}" href="index.html"  class="btn btn-lg btn-azure" v-bind:class="toSignNumber==0?'disabled' : '' ">{{signIndex}}<br></a>
+							</div>
+						</div>
+					</div>
+					<h6 class="mg-md text-lg-center" th:if="${session.nowUser.ifHasRight(1)}">
+						您也可以：
+					</h6>
+					<div  class="text-center container-div-style" th:if="${session.nowUser.ifHasRight(1)}">
+						<a th:href="@{/toDraft}" href="contract/draft.html" class="btn btn-lg btn-10-style btn-azure">起草合同<br></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-7 END -->
+
+<!-- ScrollToTop Button -->
+<a class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1',this)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32"><path class="scroll-to-top-btn-icon" d="M30,22.656l-14-13-14,13"/></svg></a>
+<!-- ScrollToTop Button END-->
+
+
+<!-- bloc-2 -->
+<div class="bloc l-bloc" id="bloc-2">
+	<div class="container bloc-lg">
+		<div class="row">
+			<div class="col-12">
+				<h5 class="mg-md text-lg-center">
+					北京交通大学实训小组荣誉出品
+				</h5>
+				<p class="text-lg-center">
+					谢志贤 韩楚博 付柏逢 张鑫成 王炯 :)
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-2 END -->
+
+
+</div>
+<!-- Main container END -->
+
+
+
+<script th:src="@{/js/jquery.min.js}"  type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/vue.js}"  type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/axios.min.js}"  type="text/javascript" charset="utf-8"></script>
+<script th:inline="javascript">
+	var meVue = new Vue({
+		el: "#bloc-7",
+		data:{
+			// 常量
+			SUCCESS: 200,
+			WAIT: 0,
+			COUNTERSIGN: 1,
+			FINALIZE: 2,
+			EXAM: 3,
+			SIGN: 4,
+			waitingIndex: "前往分配",
+			countersignIndex: "前往会签",
+			finalizeIndex: '前往定稿',
+			examIndex: '前往审批',
+			signIndex: '前往签订',
+			// 变量
+			waitingForAssigningNumber: 0,
+			toCountersignNumber: 0,
+			toFinalizeNumber: 0,
+			toExamNumber: 0,
+			toSignNumber: 0
+		},
+		mounted: function (){
+			this.getRightsList();
+		},
+		methods:{
+			deleteCookie: function () {
+				var d = new Date();
+				d.setTime(d.getTime() + (-1*24*60*60*1000));
+				var expires = "expires="+d.toUTCString();
+				document.cookie = "id=; " +expires;
+				window.location.href="/";
+			},
+			getRightsList: function (){
+				var userID = [[${session.nowUser.userid}]];
+
+				axios({
+					method: "get",
+					url: "/contract/todeal",
+					params: {userID:userID}
+				}).then(
+						function (value) {
+							if (value.data.code === meVue.SUCCESS){
+								var maps = value.data.object;
+								// 成功获取到数据
+
+								if (maps[meVue.WAIT] != null)
+								{
+									meVue.waitingForAssigningNumber = maps[meVue.WAIT].length;
+								} else {
+									meVue.waitingIndex = "无需分配";
+								}
+
+								if (maps[meVue.COUNTERSIGN] != null)
+								{
+									meVue.toCountersignNumber = maps[meVue.COUNTERSIGN].length;
+								} else {
+									meVue.countersignIndex = "无需会签";
+								}
+								if (maps[meVue.FINALIZE] != null) {
+									meVue.toFinalizeNumber = maps[meVue.FINALIZE].length;
+								} else {
+									meVue.finalizeIndex = "无需定稿";
+								}
+								if (maps[meVue.EXAM] != null) {
+									meVue.toExamNumber = maps[meVue.EXAM].length;
+								} else {
+									meVue.examIndex = "无需审批";
+								}
+								if (maps[meVue.SIGN] != null)
+								{
+									meVue.toSignNumber = maps[meVue.SIGN].length;
+								} else {
+									meVue.signIndex = "无需签订";
+								}
+
+								// 权限判断
+								if (![[${session.nowUser.ifHasRight(8)}]] && ![[${session.nowUser.ifHasRight(9)}]] && ![[${session.nowUser.ifHasRight(10)}]] && ![[${session.nowUser.ifHasRight(11)}]])
+								{
+									meVue.waitingForAssigningNumber = 0;
+									meVue.waitingIndex = "无权分配";
+								}
+								if (![[${session.nowUser.ifHasRight(2)}]])
+								{
+									meVue.toFinalizeNumber = 0;
+									meVue.finalizeIndex = "无权定稿";
+								}
+								if (![[${session.nowUser.ifHasRight(5)}]])
+								{
+									meVue.toCountersignNumber = 0;
+									meVue.countersignIndex = "无权会签";
+								}
+								if (![[${session.nowUser.ifHasRight(6)}]])
+								{
+									meVue.toExamNumber = 0;
+									meVue.examIndex = "无权审批";
+								}
+								if (![[${session.nowUser.ifHasRight(7)}]])
+								{
+									meVue.toSignNumber = 0;
+									meVue.signIndex = "无权签订";
+								}
+
+							} else {
+								alert("服务器连接失败。请刷新重试。")
+							}
+						}
+				).catch();
+			},
+			getAdmin: function () {
+				var code = prompt("请输入管理员邀请码:");
+				axios({
+					method: "post",
+					url: "/rights/toBeAdmin",
+					params: {code:code}
+				}).then(function (value) {
+					if(value.data == 200){
+						alert("您以获得管理员权限，刷新页面查看吧！");
+					}else{
+						alert("抱歉，邀请码不正确！");
+					}
+				});
+			}
+
+		}
+	});
+</script>
+
+</body>
+</html>
