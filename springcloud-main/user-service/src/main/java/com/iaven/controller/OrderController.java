@@ -3,10 +3,10 @@ package com.iaven.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iaven.pojo.table.Bill;
 import com.iaven.pojo.table.Order;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -32,6 +32,8 @@ public class OrderController {
     }
 
 
+
+
     /**
      * 根据收件人姓名查询订单
      * @param pageNum
@@ -39,7 +41,7 @@ public class OrderController {
      * @param name
      * @return
      */
-    @GetMapping("search_orderbyname")
+    @GetMapping("/search_orderbyname")
     @ResponseBody
     public PageInfo<Order> get_recordsbyname(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid,String name){
         PageHelper.startPage(pageNum,pageSize);
@@ -60,7 +62,7 @@ public class OrderController {
      * @param address
      * @return
      */
-    @GetMapping("search_orderbyaddress")
+    @GetMapping("/search_orderbyaddress")
     @ResponseBody
     public PageInfo<Order> get_recordsbyaddress(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid,String address){
         PageHelper.startPage(pageNum,pageSize);
@@ -74,13 +76,32 @@ public class OrderController {
 
 
     /**
-     * 提交订单
+     * 计算并列出不同的物流公司对该订单的预计送达时间和花费
+     * @param pageNum
+     * @param pageSize
      * @param order
      * @return
      */
-    @GetMapping("submit_order")
+    @GetMapping("/list_orderdetails")
     @ResponseBody
-    public int order(Order order){
+    public PageInfo<Object> get_allrecords(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize, Order order){
+        PageHelper.startPage(pageNum,pageSize);
+
+        /**TODO
+         *
+         */
+        PageInfo<Object> pageInfo = new PageInfo<>();
+        return pageInfo;
+    }
+
+    /**
+     * 选择物流公司提交订单
+     * @param order
+     * @return
+     */
+    @PostMapping("/submit_order")
+    @ResponseBody
+    public int order(Order order,int transunit){
 
         /**TODO
          *
@@ -94,7 +115,7 @@ public class OrderController {
      * @param orderid
      * @return
      */
-    @GetMapping("revoke_order")
+    @PostMapping("/revoke_order")
     @ResponseBody
     public int revoke(int orderid){
 
@@ -109,9 +130,29 @@ public class OrderController {
      * @param userid
      * @return
      */
-    @GetMapping("search_bill")
+    @GetMapping("/search_bill")
     @ResponseBody
-    public int search_bill(int userid){
+    public PageInfo<Bill> search_bill(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid){
+
+        PageHelper.startPage(pageNum,pageSize);
+
+        /**TODO
+         *
+         */
+        PageInfo<Bill> pageInfo = new PageInfo<>();
+        return pageInfo;
+    }
+
+
+    /**
+     * 删除账单
+     * @param userid
+     * @param billid
+     * @return
+     */
+    @PostMapping("/delete_bill")
+    @ResponseBody
+    public int delete_bill(int userid,int billid){
 
         /**TODO
          *
