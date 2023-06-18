@@ -10,10 +10,9 @@ public class Global {
     public static final int FIND = 101; //找回
 
 
-
-    public static final int tran = 0; // 物流人员
-    public static final int manager = 1; //仓管员
-    public static final int root = 2;  //管理员
-
+    public static final String Unshipped = "U";
+    public static final String Shipped = "S";
+    public static final String FINISH = "F";
+    public static final String DELE = "D";
 
 }

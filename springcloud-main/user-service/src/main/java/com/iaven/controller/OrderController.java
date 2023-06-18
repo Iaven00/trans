@@ -3,15 +3,21 @@ package com.iaven.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.iaven.pojo.table.Bill;
 import com.iaven.pojo.table.Order;
+import com.iaven.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/order")
 public class OrderController {
 
+
+    @Autowired
+    OrderService orderService;
     /**
      * 列出用户的所有订单
      * @param pageNum
@@ -24,10 +30,8 @@ public class OrderController {
     public PageInfo<Order> get_allrecords(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize, int userid){
         PageHelper.startPage(pageNum,pageSize);
 
-        /**TODO
-         *
-         */
-        PageInfo<Order> pageInfo = new PageInfo<Order>();
+        List<Order> orders = orderService.list_orders(userid);
+        PageInfo<Order> pageInfo = new PageInfo<Order>(orders);
         return pageInfo;
     }
 
@@ -46,10 +50,8 @@ public class OrderController {
     public PageInfo<Order> get_recordsbyname(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid,String name){
         PageHelper.startPage(pageNum,pageSize);
 
-        /**TODO
-         *
-         */
-        PageInfo<Order> pageInfo = new PageInfo<Order>();
+        List<Order> orders = orderService.listbyrename(userid,name);
+        PageInfo<Order> pageInfo = new PageInfo<Order>(orders);
         return pageInfo;
     }
 
@@ -67,10 +69,8 @@ public class OrderController {
     public PageInfo<Order> get_recordsbyaddress(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid,String address){
         PageHelper.startPage(pageNum,pageSize);
 
-        /**TODO
-         *
-         */
-        PageInfo<Order> pageInfo = new PageInfo<Order>();
+        List<Order> orders = orderService.listbyaddress(userid,address);
+        PageInfo<Order> pageInfo = new PageInfo<Order>(orders);
         return pageInfo;
     }
 
@@ -101,12 +101,10 @@ public class OrderController {
      */
     @PostMapping("/submit_order")
     @ResponseBody
-    public int order(Order order,int transunit){
+    public int order(Order order){
 
-        /**TODO
-         *
-         */
-        return 1;
+
+        return orderService.submit_order(order);
     }
 
 
@@ -119,10 +117,7 @@ public class OrderController {
     @ResponseBody
     public int revoke(int orderid){
 
-        /**TODO
-         *
-         */
-        return 1;
+        return orderService.delete_bill(orderid);
     }
 
     /**
@@ -132,32 +127,25 @@ public class OrderController {
      */
     @GetMapping("/search_bill")
     @ResponseBody
-    public PageInfo<Bill> search_bill(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid){
+    public PageInfo<Order> search_bill(@RequestParam("pageNum")Integer pageNum, @RequestParam("pageSize")Integer pageSize,int userid){
 
         PageHelper.startPage(pageNum,pageSize);
 
-        /**TODO
-         *
-         */
-        PageInfo<Bill> pageInfo = new PageInfo<>();
+        List<Order> orders = orderService.search_bill(userid);
+        PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return pageInfo;
     }
 
 
     /**
      * 删除账单
-     * @param userid
-     * @param billid
+     * @param orderid
      * @return
      */
     @PostMapping("/delete_bill")
     @ResponseBody
-    public int delete_bill(int userid,int billid){
-
-        /**TODO
-         *
-         */
-        return 1;
+    public int delete_bill(int orderid){
+        return orderService.delete_bill(orderid);
     }
 
 
