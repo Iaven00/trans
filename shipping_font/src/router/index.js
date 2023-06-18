@@ -4,13 +4,20 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
-const Login = () => import('../components/Login')
-const Center= () =>import('../components/center')
+const Login = () => import('../views/Login')
+const Center= () =>import('../views/center')
+const newOrder = () => import('../views/newOrder')
+const manageOrder= () =>import('../views/manageOrder')
+const listOrder = () => import('../views/listOrder')
+
 
 const routes = [
     { path: '/', component: Login,meta:{requireAuth:false}},
     { path: '/login', component: Login,meta:{requireAuth:false} },
     { path: '/center', component: Center,meta:{requireAuth:true} },
+    { path: '/newOrder', component: newOrder,meta:{requireAuth:true} },
+    { path: '/manageOrder', component: manageOrder,meta:{requireAuth:true} },
+    { path: '/listOrder', component: listOrder,meta:{requireAuth:true} },
     { path: '/*', redirect: '/' }  // 当匹配不上时重定向的到首页
 ]
 

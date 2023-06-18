@@ -1,103 +1,17 @@
 <template>
   <el-container>
     <el-aside width="200px">
-      <el-menu
-          style="height: 100vh"
-          default-active="1"
-          class="el-menu-vertical-demo"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b">
-<!--        <h3 style="color: white;font-size: 30px;margin-top: 3vh;margin-bottom: 3vh">Title</h3>-->
-        <div style="width: 200px; height: 100px;margin-top: 2vh" >
-          <img class="img" src="~@/assets/shiptitle_white.png" draggable="false" style="display: block; width: 200px; height: 100px;">
-        </div>
-        <el-menu-item index="0" @click="curpage=0" style="margin-top: 3vh">
-          <i class="el-icon-menu"></i>
-          <span slot="title">首页</span>
-        </el-menu-item>
-        <el-menu-item index="1" @click="curpage=1">
-          <i class="el-icon-s-promotion"></i>
-          <span slot="title">新增订单</span>
-        </el-menu-item>
-        <el-menu-item index="2" v-if="user.identity==1" @click="curpage_2()">
-          <i class="el-icon-s-check"></i>
-          <span slot="title">订单管理</span>
-        </el-menu-item>
-        <el-menu-item index="3" v-if="user.identity==1" @click="curpage=3">
-          <i class="el-icon-menu"></i>
-          <span slot="title">用户管理</span>
-        </el-menu-item>
-        <el-menu-item index="4" v-if="user.identity==0" @click="curpage_4()">
-          <i class="el-icon-s-check"></i>
-          <span slot="title">订单查询</span>
-        </el-menu-item>
-      </el-menu>
+      <my_aside />
     </el-aside>
     <el-container>
 <!--      头部-->
       <el-header>
-        <el-popover
-            placement="bottom"
-            title="个人信息"
-
-            width="300"
-            trigger="click"
-            content="将来放关于用户的信息。"
-            style="float: right;align-content: center;margin-top: 1vh"
-        >
-          <el-button v-if="check" slot="reference"  icon="el-icon-user-solid" circle
-                     style="background-color: #ffd04b">
-          </el-button>
-
-          <el-button v-if="!check" slot="reference"  icon="el-icon-user" circle
-                     style="background-color: #ffd04b">
-          </el-button>
-          <!--用户信息 -->
-          <div v-if="check">
-            欢迎回来！<span style="color: #55ab41">{{
-              user.username
-            }}</span>
-          </div>
-          <div v-if="user.identity==0">
-            用户身份：<span style="color: orange;font-weight: bolder">
-              普通用户
-            </span>
-          </div>
-          <div v-if="user.identity==1">
-            用户身份：<span style="color: red;font-weight: bolder">
-              后台管理员
-            </span>
-          </div>
-          <div >
-            <span @click="logout()" style="color: green;font-weight: bolder">
-              注销
-            </span>
-          </div>
-
-<!--          <div v-if="!check">-->
-<!--            <a-->
-<!--                style="-->
-<!--                    color: #55ab41;-->
-<!--                    margin-right: 148px;-->
-<!--                    text-decoration: none;-->
-<!--                  "-->
-<!--                href="/login"-->
-<!--            >对不起,请前往登录</a-->
-<!--            >-->
-<!--            <a-->
-<!--                style="color: #55ab41; text-decoration: none"-->
-<!--                href="/register"-->
-<!--            >注册</a-->
-<!--            >-->
-<!--          </div>-->
-        </el-popover>
-<!--        <div style="background-color: gray;height: 7vh"></div>-->
+        <my_header />
       </el-header>
 <!--      主要内容-->
       <el-main>
 <!--        首页-->
-        <div v-if="curpage==0">
+        <div>
           <div style="display:flex; flex-direction: row;justify-content:center">
             <div class="bock01" name="Slider-1" style="margin-right: 3%;margin-left: 3%">
               <i><img src="~@/assets/icon1.png" alt="个人政策"></i>
@@ -126,97 +40,97 @@
         </div>
         </div>
 
-<!--        下单-->
-        <div v-if="curpage==1" style="width: 100%;padding: 0px" >
-          <div >
-            <div style="margin-top: 50px;">
-              <el-col :span="10" style="border-right:2px solid #eee ">
-                <div style="display: flex;height: 40px;margin-bottom: 10px">
-                  <span class="r-g-index r-g-index-1" style="margin-left: 20px">寄</span>
-                  <span class="" style="margin-left: 10px;line-height: 30px">寄方信息</span>
-                </div>
+<!--&lt;!&ndash;        下单&ndash;&gt;-->
+<!--        <div v-if="curpage==1" style="width: 100%;padding: 0px" >-->
+<!--          <div >-->
+<!--            <div style="margin-top: 50px;">-->
+<!--              <el-col :span="10" style="border-right:2px solid #eee ">-->
+<!--                <div style="display: flex;height: 40px;margin-bottom: 10px">-->
+<!--                  <span class="r-g-index r-g-index-1" style="margin-left: 20px">寄</span>-->
+<!--                  <span class="" style="margin-left: 10px;line-height: 30px">寄方信息</span>-->
+<!--                </div>-->
 
-                <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                  <el-form-item label="寄件人姓名" prop="sendname">
-                    <el-input v-model="ruleForm.sendname" style="width: 200px;float: left"></el-input>
-                  </el-form-item>
-                  <el-form-item label="手机号"  prop="sendphone">
-                    <el-input style="width: 200px;float: left" v-model="ruleForm.sendphone"></el-input>
-                  </el-form-item>
-                  <el-form-item label="寄出地区" prop="setout" >
-                    <el-col :span="11">
-                      <el-cascader
-                          size="large"
-                          :options="options"
-                          v-model="ruleForm.setout"
-                          style="width: 200px;"
-                          @change="handleChange">
-                      </el-cascader>
-                    </el-col >
-                    <el-col :span="11">
-                      <el-form-item label="发货日期" required>
-                        <el-form-item prop="createtime">
-                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.createtime" style="width: 120px;"></el-date-picker>
-                        </el-form-item>
-                      </el-form-item>
-                    </el-col>
-                  </el-form-item>
-                  <el-form-item label="详细始发地"  prop="address">
-                    <el-input style="float: left" v-model="ruleForm.address"></el-input>
-                  </el-form-item>
-                  <el-form-item label="重量" prop="weight">
-                    <el-input v-model="ruleForm.weight"></el-input>
-                  </el-form-item>
-                  <el-form-item label="期望方式" prop="type">
-                    <el-radio-group v-model="ruleForm.type">
-                      <el-radio label="陆运" ></el-radio>
-                      <el-radio label="空运" ></el-radio>
-                      <el-radio label="海运" ></el-radio>
-                      <span></span>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="submitForm()">立即创建</el-button>
-                    <el-button @click="resetForm()">重置</el-button>
-                  </el-form-item>
-                </el-form>
-              </el-col >
+<!--                <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->
+<!--                  <el-form-item label="寄件人姓名" prop="sendname">-->
+<!--                    <el-input v-model="ruleForm.sendname" style="width: 200px;float: left"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="手机号"  prop="sendphone">-->
+<!--                    <el-input style="width: 200px;float: left" v-model="ruleForm.sendphone"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="寄出地区" prop="setout" >-->
+<!--                    <el-col :span="11">-->
+<!--                      <el-cascader-->
+<!--                          size="large"-->
+<!--                          :options="options"-->
+<!--                          v-model="ruleForm.setout"-->
+<!--                          style="width: 200px;"-->
+<!--                          @change="handleChange">-->
+<!--                      </el-cascader>-->
+<!--                    </el-col >-->
+<!--                    <el-col :span="11">-->
+<!--                      <el-form-item label="发货日期" required>-->
+<!--                        <el-form-item prop="createtime">-->
+<!--                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.createtime" style="width: 120px;"></el-date-picker>-->
+<!--                        </el-form-item>-->
+<!--                      </el-form-item>-->
+<!--                    </el-col>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="详细始发地"  prop="address">-->
+<!--                    <el-input style="float: left" v-model="ruleForm.address"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="重量" prop="weight">-->
+<!--                    <el-input v-model="ruleForm.weight"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="期望方式" prop="type">-->
+<!--                    <el-radio-group v-model="ruleForm.type">-->
+<!--                      <el-radio label="陆运" ></el-radio>-->
+<!--                      <el-radio label="空运" ></el-radio>-->
+<!--                      <el-radio label="海运" ></el-radio>-->
+<!--                      <span></span>-->
+<!--                    </el-radio-group>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item>-->
+<!--                    <el-button type="primary" @click="submitForm()">立即创建</el-button>-->
+<!--                    <el-button @click="resetForm()">重置</el-button>-->
+<!--                  </el-form-item>-->
+<!--                </el-form>-->
+<!--              </el-col >-->
 
-              <el-col :span="10" style="margin-left: 5vh">
-                <div style="display: flex;height: 40px;margin-bottom: 10px">
-                  <span class="r-g-index r-g-index-2" style="margin-left: 20px">收</span>
-                  <span class="" style="margin-left: 10px;line-height: 30px">收方信息</span>
-                </div>
-                <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                  <el-form-item label="收件人姓名" prop="recname">
-                    <el-input v-model="ruleForm.recname" style="width: 200px;float: left"></el-input>
-                  </el-form-item>
-                  <el-form-item label="手机号"  prop="recphone">
-                    <el-input style="width: 200px;float: left" v-model="ruleForm.recphone"></el-input>
-                  </el-form-item>
-                  <el-form-item label="收货地区" prop="destination" >
-                    <el-col :span="11">
-                      <el-cascader
-                          size="large"
-                          :options="options"
-                          v-model="ruleForm.destination"
-                          style="width: 200px;"
-                          @change="handleChange_2">
-                      </el-cascader>
-                    </el-col >
-                  </el-form-item>
-                  <el-form-item label="详细收货地"  prop="recaddress">
-                    <el-input style="float: left" v-model="ruleForm.recaddress"></el-input>
-                  </el-form-item>
-                  <el-form-item label="备注" prop="content">
-                    <el-input type="textarea" :rows="6" resize='none' v-model="ruleForm.content"></el-input>
-                  </el-form-item>
-                </el-form>
-              </el-col>
-            </div>
-          </div>
-        </div>
-<!--        管理员用-订单管理-->
+<!--              <el-col :span="10" style="margin-left: 5vh">-->
+<!--                <div style="display: flex;height: 40px;margin-bottom: 10px">-->
+<!--                  <span class="r-g-index r-g-index-2" style="margin-left: 20px">收</span>-->
+<!--                  <span class="" style="margin-left: 10px;line-height: 30px">收方信息</span>-->
+<!--                </div>-->
+<!--                <el-form style="height: 80%;width: 500px;justify-content: start"  :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->
+<!--                  <el-form-item label="收件人姓名" prop="recname">-->
+<!--                    <el-input v-model="ruleForm.recname" style="width: 200px;float: left"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="手机号"  prop="recphone">-->
+<!--                    <el-input style="width: 200px;float: left" v-model="ruleForm.recphone"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="收货地区" prop="destination" >-->
+<!--                    <el-col :span="11">-->
+<!--                      <el-cascader-->
+<!--                          size="large"-->
+<!--                          :options="options"-->
+<!--                          v-model="ruleForm.destination"-->
+<!--                          style="width: 200px;"-->
+<!--                          @change="handleChange_2">-->
+<!--                      </el-cascader>-->
+<!--                    </el-col >-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="详细收货地"  prop="recaddress">-->
+<!--                    <el-input style="float: left" v-model="ruleForm.recaddress"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                  <el-form-item label="备注" prop="content">-->
+<!--                    <el-input type="textarea" :rows="6" resize='none' v-model="ruleForm.content"></el-input>-->
+<!--                  </el-form-item>-->
+<!--                </el-form>-->
+<!--              </el-col>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        管理员用-订单管理&ndash;&gt;-->
         <div v-if="curpage==2" style="width: 100%;padding: 0px" >
           <!--          寄出信息表格-->
           <div style="height: 80vh;border-bottom: 3px dotted #eee">
@@ -304,196 +218,203 @@
 
         </div>
 
-<!--        用户用-订单查询-->
-        <div v-if="curpage==4" style="width: 100%;padding: 0px" >
-<!--          寄出信息表格-->
-          <div style="height: 40vh;border-bottom: 3px dotted #eee">
-            <div style="display: flex;height: 40px;margin-bottom: 10px">
-              <span class="r-g-index r-g-index-1" style="margin-left: 20px">寄</span>
-              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我寄出的</span>
-            </div>
-            <div style="">
-              <el-table
-                  :data="send_tableData.filter(data => !search || data.recname.toLowerCase().includes(search.toLowerCase()))"
-                  style="width: 80%;margin-left: 3vw"
-                  height="30vh"
-                  :row-class-name="tableRowClassName">
-                <el-table-column
-                    prop="recname"
-                    label="收件人"
-                    width="100">
-                </el-table-column>
-                <el-table-column
-                    prop="recphone"
-                    label="联系方式"
-                    width="150">
-                </el-table-column>
-                <el-table-column
-                    prop="destination"
-                    label="收货地址">
-                </el-table-column>
-                <el-table-column
-                    prop="type"
-                    label="运输方式">
-                </el-table-column>
-                <el-table-column
-                    prop="esttime"
-                    label="预计时间">
-                </el-table-column>
-                <el-table-column
-                    prop="state"
-                    label="当前状态"
-                    width="100">
-                  <template slot-scope="scope">
-                    <el-tag
-                        v-if="scope.row.state === '未发货'"
-                        :type="'info'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '运输中'"
-                        :type="'primary'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '待签收'"
-                        :type="'warning'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '已完成'"
-                        :type="'success'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                  <template slot="header" slot-scope="scope">
-                    <el-input
-                        v-model="search"
-                        size="mini"
-                        placeholder="输入关键字搜索"/>
-                  </template>
-                  <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-                    <el-button
-                        v-if="scope.row.state === '待签收'"
-                        size="mini"
-                        type="success"
-                        @click="handleDelete(scope.$index, scope.row)">签收</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </div>
-<!--          收货信息表格-->
-          <div style="margin-top: 2vh">
-            <div style="display: flex;height: 40px;margin-bottom: 10px">
-              <span class="r-g-index r-g-index-2" style="margin-left: 20px">收</span>
-              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我收到的</span>
-            </div>
-            <div style="">
-              <el-table
-                  :data="rec_tableData.filter(data => !search_2 || data.sendname.toLowerCase().includes(search_2.toLowerCase()))"
-                  style="width: 80%;margin-left: 3vw"
-                  height="30vh"
-                  :row-class-name="tableRowClassName">
-                <el-table-column
-                    prop="sendname"
-                    label="寄件人"
-                    width="100">
-                </el-table-column>
-                <el-table-column
-                    prop="sendphone"
-                    label="联系方式"
-                    width="150">
-                </el-table-column>
-                <el-table-column
-                    prop="setout"
-                    label="寄件地址">
-                </el-table-column>
-                <el-table-column
-                    prop="type"
-                    label="运输方式">
-                </el-table-column>
-                <el-table-column
-                    prop="esttime"
-                    label="预计时间">
-                </el-table-column>
-                <el-table-column
-                    prop="state"
-                    label="当前状态"
-                    width="100">
-                  <template slot-scope="scope">
-                    <el-tag
-                        v-if="scope.row.state === '未发货'"
-                        :type="'info'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '运输中'"
-                        :type="'primary'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '待签收'"
-                        :type="'warning'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                    <el-tag
-                        v-if="scope.row.state === '已完成'"
-                        :type="'success'"
-                        disable-transitions>{{scope.row.state}}</el-tag>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                  <template slot="header" slot-scope="scope">
-                    <el-input
-                        v-model="search_2"
-                        size="mini"
-                        placeholder="输入关键字搜索"/>
-                  </template>
-                  <template slot-scope="scope">
-                    <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-                    <el-button
-                        v-if="scope.row.state === '待签收'"
-                        size="mini"
-                        type="success"
-                        @click="handleStatus(scope.$index, scope.row)">签收</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </div>
+<!--&lt;!&ndash;        用户用-订单查询&ndash;&gt;-->
+<!--        <div v-if="curpage==4" style="width: 100%;padding: 0px" >-->
+<!--&lt;!&ndash;          寄出信息表格&ndash;&gt;-->
+<!--          <div style="height: 40vh;border-bottom: 3px dotted #eee">-->
+<!--            <div style="display: flex;height: 40px;margin-bottom: 10px">-->
+<!--              <span class="r-g-index r-g-index-1" style="margin-left: 20px">寄</span>-->
+<!--              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我寄出的</span>-->
+<!--            </div>-->
+<!--            <div style="">-->
+<!--              <el-table-->
+<!--                  :data="send_tableData.filter(data => !search || data.recname.toLowerCase().includes(search.toLowerCase()))"-->
+<!--                  style="width: 80%;margin-left: 3vw"-->
+<!--                  height="30vh"-->
+<!--                  :row-class-name="tableRowClassName">-->
+<!--                <el-table-column-->
+<!--                    prop="recname"-->
+<!--                    label="收件人"-->
+<!--                    width="100">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="recphone"-->
+<!--                    label="联系方式"-->
+<!--                    width="150">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="destination"-->
+<!--                    label="收货地址">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="type"-->
+<!--                    label="运输方式">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="esttime"-->
+<!--                    label="预计时间">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="state"-->
+<!--                    label="当前状态"-->
+<!--                    width="100">-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '未发货'"-->
+<!--                        :type="'info'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '运输中'"-->
+<!--                        :type="'primary'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '待签收'"-->
+<!--                        :type="'warning'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '已完成'"-->
+<!--                        :type="'success'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--                <el-table-column label="操作">-->
+<!--                  <template slot="header" slot-scope="scope">-->
+<!--                    <el-input-->
+<!--                        v-model="search"-->
+<!--                        size="mini"-->
+<!--                        placeholder="输入关键字搜索"/>-->
+<!--                  </template>-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-button-->
+<!--                        size="mini"-->
+<!--                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>-->
+<!--                    <el-button-->
+<!--                        v-if="scope.row.state === '待签收'"-->
+<!--                        size="mini"-->
+<!--                        type="success"-->
+<!--                        @click="handleDelete(scope.$index, scope.row)">签收</el-button>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--              </el-table>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--&lt;!&ndash;          收货信息表格&ndash;&gt;-->
+<!--          <div style="margin-top: 2vh">-->
+<!--            <div style="display: flex;height: 40px;margin-bottom: 10px">-->
+<!--              <span class="r-g-index r-g-index-2" style="margin-left: 20px">收</span>-->
+<!--              <span class="" style="margin-left: 10px;line-height: 30px;font-weight: bolder">我收到的</span>-->
+<!--            </div>-->
+<!--            <div style="">-->
+<!--              <el-table-->
+<!--                  :data="rec_tableData.filter(data => !search_2 || data.sendname.toLowerCase().includes(search_2.toLowerCase()))"-->
+<!--                  style="width: 80%;margin-left: 3vw"-->
+<!--                  height="30vh"-->
+<!--                  :row-class-name="tableRowClassName">-->
+<!--                <el-table-column-->
+<!--                    prop="sendname"-->
+<!--                    label="寄件人"-->
+<!--                    width="100">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="sendphone"-->
+<!--                    label="联系方式"-->
+<!--                    width="150">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="setout"-->
+<!--                    label="寄件地址">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="type"-->
+<!--                    label="运输方式">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="esttime"-->
+<!--                    label="预计时间">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                    prop="state"-->
+<!--                    label="当前状态"-->
+<!--                    width="100">-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '未发货'"-->
+<!--                        :type="'info'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '运输中'"-->
+<!--                        :type="'primary'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '待签收'"-->
+<!--                        :type="'warning'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                    <el-tag-->
+<!--                        v-if="scope.row.state === '已完成'"-->
+<!--                        :type="'success'"-->
+<!--                        disable-transitions>{{scope.row.state}}</el-tag>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--                <el-table-column label="操作">-->
+<!--                  <template slot="header" slot-scope="scope">-->
+<!--                    <el-input-->
+<!--                        v-model="search_2"-->
+<!--                        size="mini"-->
+<!--                        placeholder="输入关键字搜索"/>-->
+<!--                  </template>-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-button-->
+<!--                        size="mini"-->
+<!--                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>-->
+<!--                    <el-button-->
+<!--                        v-if="scope.row.state === '待签收'"-->
+<!--                        size="mini"-->
+<!--                        type="success"-->
+<!--                        @click="handleStatus(scope.$index, scope.row)">签收</el-button>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--              </el-table>-->
+<!--            </div>-->
+<!--          </div>-->
 
-        </div>
+<!--        </div>-->
 
-        <el-dialog
-            title="提示"
-            :visible.sync="changeState"
-            width="30%">
-          <el-select v-model="tempState" placeholder="请选择状态">
-            <el-option
-                v-for="item in state_options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                @change="stateChange"
-            >
-            </el-option>
-          </el-select>
-          <span slot="footer" class="dialog-footer">
-    <el-button @click="changeState = false">取 消</el-button>
-    <el-button type="primary" @click="ensureState()">确 定</el-button>
-  </span>
-        </el-dialog>
+<!--        <el-dialog-->
+<!--            title="提示"-->
+<!--            :visible.sync="changeState"-->
+<!--            width="30%">-->
+<!--          <el-select v-model="tempState" placeholder="请选择状态">-->
+<!--            <el-option-->
+<!--                v-for="item in state_options"-->
+<!--                :key="item.value"-->
+<!--                :label="item.label"-->
+<!--                :value="item.value"-->
+<!--                @change="stateChange"-->
+<!--            >-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--          <span slot="footer" class="dialog-footer">-->
+<!--    <el-button @click="changeState = false">取 消</el-button>-->
+<!--    <el-button type="primary" @click="ensureState()">确 定</el-button>-->
+<!--  </span>-->
+<!--        </el-dialog>-->
 
       </el-main>
     </el-container>
   </el-container>
 </template>
 
+
 <script>
 import { regionData,codeToText } from 'element-china-area-data'
+import my_aside from '../components/my_aside.vue'
+import my_header from '../components/my_header.vue'
 import axios from "axios";
 export default {
+  components:{
+    my_aside,
+    my_header
+  },
   name: "center.vue",
   data(){
     return{
@@ -790,7 +711,7 @@ export default {
       }
       return '';
     },
-      handleChange (value) {
+      Change (value) {
         this.ruleForm.selectedOptions=''
         this.place_1=''
         for(let i =0;i<value.length;i++){
@@ -823,7 +744,7 @@ export default {
         }
       }
     },
-    handleEdit(index, row) {
+    dEdit(index, row) {
       console.log(index, row);
     },
     handleStatus(index, row) {
