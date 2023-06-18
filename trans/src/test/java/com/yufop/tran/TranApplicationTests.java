@@ -2,9 +2,11 @@ package com.yufop.tran;
 
 import com.yufop.tran.mapper.UserMapper;
 import com.yufop.tran.pojo.table.Order;
+import com.yufop.tran.pojo.table.User;
 import com.yufop.tran.pojo.table.UserExample;
 import com.yufop.tran.service.MailService;
 import com.yufop.tran.service.OrderService;
+import com.yufop.tran.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,13 @@ import java.util.List;
 class TranApplicationTests {
 
     @Autowired
-    OrderService orderService;
+    UserService userService;
 
     @Test
     void contextLoads() {
-        List<Order> orders = orderService.list_sporders("456");
-        System.out.println(orders.size());
+//        List<Order> orders = orderService.list_orders(1);
+        User  user = userService.loginUser("123","sdf");
+        System.out.println(user);
 
     }
 

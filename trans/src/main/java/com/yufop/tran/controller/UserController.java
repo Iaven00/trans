@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 import static com.yufop.tran.util.Global.*;
@@ -31,8 +29,7 @@ public class UserController {
     @ResponseBody
     @LimitingRequired
     public ReturnObject<User> loginUser(String email,
-                                          String password,
-                                          HttpSession session, HttpServletResponse response){
+                                          String password){
         System.out.println(email);
         User user = userService.loginUser(email,password);
         ReturnObject<User> ret = new ReturnObject<>(NO_TOKEN,user);
@@ -51,8 +48,7 @@ public class UserController {
     @PostMapping("/register")
     @ResponseBody
     @LimitingRequired
-    public int register(@RequestBody User user, @RequestParam("code")String codeValue, HttpSession session){
-//    public int register(@RequestBody User user, @RequestParam("code")String codeValue,HttpSession session){
+    public int register(@RequestBody User user, @RequestParam("code")String codeValue){
 
 
         String code = mailService.getCode(user.getEmail(),REGISTER);
@@ -78,12 +74,5 @@ public class UserController {
 
     }
 
-
-
-    @PostMapping("/token_check")
-    @ResponseBody
-    public int token_check(){
-        return SUCCESS;
-    }
 
 }

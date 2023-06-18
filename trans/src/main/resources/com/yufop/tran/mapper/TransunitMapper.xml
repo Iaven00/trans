@@ -99,7 +99,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from transunit
+    from `transunit`
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -115,7 +115,7 @@
     -->
     select 
     <include refid="Base_Column_List" />
-    from transunit
+    from `transunit`
     where transunitId = #{transunitid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

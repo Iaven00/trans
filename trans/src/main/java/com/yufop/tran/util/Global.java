@@ -15,4 +15,10 @@ public class Global {
 
     public static final Long TOKEN_BUCKET_SIZE = 10L;//令牌桶容量
 
+
+    public static final String Unshipped = "U";
+    public static final String Shipped = "S";
+    public static final String FINISH = "F";
+    public static final String DELE = "D";
+
 }
