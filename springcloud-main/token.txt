@@ -1,9 +1,14 @@
-通过网关访问前端
 
-前端输入密码
+1.获取物流公司接口
+我传过来重量，返回 公司及其旗下的可以使用物流单位（rest>重量）
 
-返回给后端并通过拦截器，后端将数据输给auth认证服务
+2.前端点击分配后，传过来单位id，将物流单位id置入order表中的tranunitid，然后物流单位的rest修改
 
-auth服务调用user服务登录并生成token并返回给网关
+3.前端点击分配后，record中需自动插入一条 orderid content为已分配 时间为当前时间的记录，且更改目前的order表中的status字段
 
-网关将token传给前端并前端存储本地，以后每次提交时都在请求头携带token
+4.前端添加物流记录后 像后端传入order id content 向record表中插入 orderid content和当前时间
+
+
+5.传入orderid 获取所有信息 （主要是查出所有的record的信息，时间排序，以列表返回）
+
+6.传入orderid 点击收货 改变status即可
