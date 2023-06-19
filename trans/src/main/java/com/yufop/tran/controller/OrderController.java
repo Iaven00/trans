@@ -35,7 +35,11 @@ public class OrderController {
         return pageInfo;
     }
 
-
+    @GetMapping("/tt")
+    @ResponseBody
+    public int test(){
+        return 1;
+    }
 
 
     /**

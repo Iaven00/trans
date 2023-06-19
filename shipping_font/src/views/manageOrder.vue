@@ -82,20 +82,70 @@
                   </template>
                   <template slot-scope="scope">
                     <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-                    <el-button
+                        v-if="scope.row.state === '运输中'"
                         size="mini"
                         type="primary"
-                        @click="handleState(scope.$index, scope.row)">修改状态</el-button>
+                        @click="openProgress(scope.$index, scope.row)">更新状态</el-button>
+                    <el-button
+                        v-if="scope.row.state === '未发货'"
+                        size="mini"
+                        type="success"
+                        @click="openDialog(scope.$index, scope.row)">发货分配</el-button>
+                    <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">详情</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
           </div>
-
-
         </div>
+
+<!--        弹出框1-->
+        <div>
+          <el-button type="primary" @click="openDialog">选择物流公司</el-button>
+          <el-dialog
+              title="选择物流公司"
+              :visible.sync="dialogVisible"
+              :close-on-click-modal="false"
+          >
+            <div class="company-list">
+              <el-card v-for="(company, index) in companies" :key="index" @click="selectCompany(company)">
+                <div class="company-logo">
+<!--                  <img src="company.logo" alt="公司logo" />-->
+                  <img :src="company.logo"  alt="公司logo" style="height: 150px;object-fit: cover;" >
+                </div>
+                <div class="company-name">{{ company.name }}</div>
+              </el-card>
+            </div>
+          </el-dialog>
+        </div>
+
+<!--        弹出框2 展示进度-->
+        <div>
+          <el-button type="primary" @click="openProgress">查看运输进度</el-button>
+          <el-dialog
+              title="运输进度"
+              :visible.sync="progressVisible"
+              :close-on-click-modal="false"
+          >
+            <el-steps :active="activeStep" align-center >
+              <el-step v-for="(step, index) in transportProgress" :key="index" :title="step.title" />
+            </el-steps>
+            <div>
+              <div style="width: 100%;justify-content: start">
+                <el-input v-model="newStep" style="margin: 3rem;width: 15rem" placeholder="请输入新的运输节点" />
+                <el-button type="primary" @click="addStep">添加</el-button>
+                <el-button type="success" @click="addStep">确认到达</el-button>
+              </div>
+              <div>
+
+              </div>
+            </div>
+
+          </el-dialog>
+        </div>
+
       </el-main>
     </el-container>
   </el-container>
@@ -114,7 +164,20 @@ export default {
   },
   data(){
     return {
-
+      progressVisible: false,
+      transportProgress: [
+        { title: '发货' },
+        { title: '装车' },
+        { title: '运输中' },
+        { title: '到达目的地' },
+        { title: '卸货' },
+        { title: '完成' },
+      ],
+      activeStep: 0,
+      newStep: '',
+      dialogVisible: false,
+      companies: [],
+      selectedCompany: null,
       state_options: [{
         value: '未发货',
         label: '未发货'
@@ -171,7 +234,41 @@ export default {
           state:'待签收',
         }
       ],
-      all_tableData:[],
+      all_tableData:[      {
+        recname:'ZLG',
+        recphone: "18224426057",
+        destination:"北京市海淀区",
+        type:'陆运',
+        state:'未发货',
+      },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'运输中',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'已完成',
+        },
+        {
+          recname:'ZLG',
+          recphone: "18224426057",
+          destination:"北京市海淀区",
+          type:'陆运',
+          state:'待签收',
+        }],
       rec_tableData: [
         {
           sendname:'禹浩男喵',
@@ -259,6 +356,32 @@ export default {
     this.getAll();
   },
   methods: {
+    openProgress(index,row) {
+      this.progressVisible = true;
+    },
+    addStep() {
+      if (this.newStep) {
+        this.transportProgress.push({ title: this.newStep });
+        this.newStep = '';
+        this.activeStep = this.transportProgress.length - 1;
+      }
+    },
+    openDialog(index,row) {
+      console.log(index)
+      // 从后端获取公司列表数据
+      // 这里假设获取的数据格式为 [{ name: '公司1', logo: 'logo1.png' }, { name: '公司2', logo: 'logo2.png' }]
+      this.companies = [
+        { name: '交大物流', logo: 'https://636c-cloud1-8gc6ijvn24a36d79-1318402435.tcb.qcloud.la/appSource/bjtu.jpg?sign=80ef6386a463431bb89aedd32013970d&t=1687165095' },
+        { name: '公司2', logo: 'logo2.png' },
+      ];
+      this.dialogVisible = true;
+    },
+    selectCompany(company) {
+      this.selectedCompany = company;
+      this.dialogVisible = false;
+      // 将选中的公司传递给父组件或做其他处理
+      this.$emit('select', company);
+    },
     ensureState(){
       if(this.tempState!=''){
         let _this=this;
@@ -465,6 +588,28 @@ export default {
 </script>
 
 <style scoped>
+.company-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.el-card {
+  margin: 10px;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+.company-logo {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.company-name {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 15px;
+}
 
 .bock01 {
   border: 1px solid rgba(0,0,0,0.10);
