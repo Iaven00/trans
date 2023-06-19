@@ -13,38 +13,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/order")
+
 public class OrderController {
 
     @Autowired
     OrderService orderService;
 
-    @GetMapping("/selectBysp")
+    @RequestMapping("/order/selectBysp")
     @ResponseBody
     public List<Order> Listordersp(String phone){
         return orderService.list_sporders(phone);
     }
 
-    @GetMapping("/selectByrp")
+    @RequestMapping("/order/selectByrp")
     @ResponseBody
     public List<Order> Listorderrp(String phone){
         return orderService.list_rporders(phone);
     }
 
 
-    @GetMapping("/selectAll")
+    @RequestMapping("/order/selectAll")
     @ResponseBody
     public List<Order> Listorder(){
         return orderService.list_orders();
     }
 
-    @PostMapping("/addOrder")
+    @RequestMapping("/order/addOrder")
     @ResponseBody
     public int addOrder(Order order){
         return orderService.add_Order(order);
     }
-
-
-
 
 }
