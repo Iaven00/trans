@@ -31,5 +31,10 @@ public interface OrderService {
 
     int delete_bill(int orderid);
 
+    List<Order> list_all();
+
+    List<Order> listBysp(String p);
+
+    List<Order> listByrp(String p);
 
 }
