@@ -3,8 +3,11 @@ package com.example.mapper;
 import com.example.pojo.Company;
 import com.example.pojo.CompanyExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface CompanyMapper {
     long countByExample(CompanyExample example);
 

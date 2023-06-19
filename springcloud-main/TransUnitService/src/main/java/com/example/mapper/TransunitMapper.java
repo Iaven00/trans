@@ -3,7 +3,10 @@ package com.example.mapper;
 import com.example.pojo.Transunit;
 import com.example.pojo.TransunitExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 
 public interface TransunitMapper {
     long countByExample(TransunitExample example);
@@ -27,4 +30,6 @@ public interface TransunitMapper {
     int updateByPrimaryKeySelective(Transunit record);
 
     int updateByPrimaryKey(Transunit record);
+
+    List<Transunit> listBycompanyid(@Param("rest") int rest);
 }

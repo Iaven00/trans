@@ -1,10 +1,7 @@
 package com.iaven;
 
 
-import com.iaven.mapper.OrderMapper;
-import com.iaven.pojo.table.Order;
-import com.iaven.service.MailService;
-import com.iaven.service.OrderService;
+
 import com.iaven.service.UserService;
 import org.mockito.internal.matchers.Or;
 import org.mybatis.spring.annotation.MapperScan;
@@ -22,11 +19,7 @@ import java.util.List;
 public class AppTest 
 {
 
-    @Autowired
-    MailService mailService;
 
-    @Autowired
-    OrderService orderService;
 
     @Autowired
     UserService userService;

@@ -1,15 +1,13 @@
-package com.iaven.service;
+package com.example.service;
 
-
-
-
-import com.iaven.pojo.table.Order;
-
+import com.example.pojo.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-public interface OrderService {
+@Service
+public interface orderService {
 
 
     //根据用户id查询订单

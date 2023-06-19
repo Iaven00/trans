@@ -1,23 +1,15 @@
-package com.iaven.service.impl;
+package com.example.service.impl;
 
-import com.iaven.mapper.OrderMapper;
-import com.iaven.pojo.table.Order;
-import com.iaven.pojo.table.OrderExample;
-import com.iaven.service.OrderService;
-
-
+import com.example.mapper.OrderMapper;
+import com.example.pojo.Order;
+import com.example.pojo.OrderExample;
+import com.example.service.orderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.iaven.utils.Global.*;
+public class orderServiceImpl implements orderService {
 
-
-@Service
-@Repository
-public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderMapper orderMapper;
@@ -26,7 +18,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> list_orders(int id) {
         OrderExample orderExample = new OrderExample();
-        orderExample.createCriteria().andUseridEqualTo(id).andStateNotEqualTo(DELE).andStateNotEqualTo(FINISH);
+        orderExample.createCriteria().andUseridEqualTo(id).andStateNotEqualTo("2").andStateNotEqualTo("3");
         return orderMapper.selectByExample(orderExample);
     }
 
@@ -84,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> search_bill(int userid) {
         OrderExample orderExample = new OrderExample();
-        orderExample.createCriteria().andUseridEqualTo(userid).andStateEqualTo(FINISH);
+        orderExample.createCriteria().andUseridEqualTo(userid).andStateEqualTo("3");
         return orderMapper.selectByExample(orderExample);
     }
 
@@ -93,7 +85,8 @@ public class OrderServiceImpl implements OrderService {
         OrderExample orderExample = new OrderExample();
         orderExample.createCriteria().andIdEqualTo(orderid);
         Order order = new Order();
-        order.setState(DELE);
+        order.setState("2");
         return orderMapper.updateByExampleSelective(order,orderExample);
     }
+
 }
