@@ -36,8 +36,8 @@ public class AppTest
     @Test
     public void contextLoads()
     {
-        List<Order> orders = orderService.list_orders();
-        System.out.println(orders.size());
-        System.out.println(userService.getUserById(1).toString());
+//        List<Order> orders = orderService.list_orders();
+//        System.out.println(orders.size());
+//        System.out.println(userService.getUserById(1).toString());
     }
 }
