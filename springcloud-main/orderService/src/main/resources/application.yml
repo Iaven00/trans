@@ -1,0 +1,45 @@
+server:
+  port: 8707
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8700/eureka/
+
+spring:
+  application:
+    name: orderservice
+
+
+datasource:
+  url: jdbc:mysql://8.130.83.55:3306/shipp?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  username: root
+#    password: zlg%wares-manager%1006
+  password: 123456
+  # driver-class-name: com.mysql.jdbc.Driver
+  driver-class-name: com.mysql.jdbc.Driver
+  dbcp2:
+    min-idle: 5                                # 数据库连接池的最小维持连接数
+    initial-size: 5                            # 初始化连接数
+    max-total: 5                               # 最大连接数
+    max-wait-millis: 150                       # 等待连接获取的最大超时时间
+
+redis:
+  host: localhost
+  password: 123456
+  port: 6379
+  database: 0
+  timeout: 1800000
+  lettuce:
+    pool:
+      max-active: 20
+      max-idle: 5
+      min-idle: 0
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:com/iaven/mapper/*.xml    # mapper映射文件位置
+  type-aliases-package: com.iaven.pojo.table    # 实体类所在的位置
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
+    map-underscore-to-camel-case: true
