@@ -61,4 +61,6 @@ public interface OrderMapper {
      * @mbggenerated Tue Jun 13 21:37:30 CST 2023
      */
     int updateByExample(@Param("record") Order record, @Param("example") OrderExample example);
+
+    int deleteByPrimaryKey(int order_id);
 }

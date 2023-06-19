@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>基于Thymeleaf的物流管理系统</title>
+  <!-- 引入Bootstrap的CSS文件和JS文件 -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <!-- 引入Font Awesome的CSS文件 -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* Header样式 */
+    .header {
+      background-color: #333;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+    }
+    /* 侧边导航栏样式 */
+    .nav-sidebar {
+      width: 200px;
+      height: 100%;
+      position: fixed;
+      top: 50px;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      padding: 20px 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      border-right: 1px solid #eee;
+    }
+    /* 侧边导航栏中的链接样式 */
+    .nav-sidebar a {
+      color: #333;
+      display: block;
+      padding: 10px 15px;
+    }
+    /* 侧边导航栏中的链接激活样式 */
+    .nav-sidebar a.active {
+      color: #fff;
+      background-color: #337ab7;
+    }
+    .active {
+      color: #fff;
+      background-color: #337ab7;
+    }
+    /* 内容部分样式 */
+    .main {
+      margin-left: 250px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+  <h1>Fi&shpping  物流管理系统</h1>
+</div>
+
+<!-- 侧边导航栏 -->
+<div class="nav-sidebar">
+  <ul class="nav flex-column">
+    <li th:classappend="${#httpServletRequest.requestURI.startsWith('/add')} ? 'active' : ''"><a href="/hello/center" class="nav-link">主页</a></li>
+    <li th:classappend="${#httpServletRequest.requestURI.startsWith('/add')} ? 'active' : ''"><a href="/order/ToNewOrder" class="nav-link">新增订单</a></li>
+    <li th:classappend="${#httpServletRequest.requestURI.startsWith('/add')} ? 'active' : ''"><a href="/order/myOrder" class="nav-link">我的订单</a></li>
+    <li th:if="${identity}==1" th:classappend="${#httpServletRequest.requestURI.startsWith('/query')} ? 'active' : ''"><a href="/order/selectAll" class="nav-link">管理订单</a></li>
+  </ul>
+</div>
+
+<!-- 内容部分 -->
+
+<div class="container" style="margin-top: 3rem">
+  <div class="row">
+    <!-- 上部分：我收到的订单 -->
+    <div class="col-md-12">
+      <h2>我收到的</h2>
+      <hr>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>发件人</th>
+          <th>收货地址</th>
+          <th>预计时间</th>
+          <th>当前状态</th>
+          <th>详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 根据物流信息列表动态生成表格内容 -->
+        <tr th:each="order : ${receivedOrders}">
+          <td th:text="${order.sendname}"></td>
+          <td th:text="${order.destination}"></td>
+          <td th:text="${order.esttime}"></td>
+          <td th:text="${order.state}"></td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderModal"
+                    data-id="${order.id}" data-recname="${order.recname}" data-sendname="${order.sendname}"
+                    data-destination="${order.destination}" data-esttime="${order.esttime}" data-state="${order.state}">
+              查看详情
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 下部分：我发出的订单 -->
+    <div class="col-md-12">
+      <h2>我发出的</h2>
+      <hr>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>收件人</th>
+          <th>收货地址</th>
+          <th>预计时间</th>
+          <th>当前状态</th>
+          <th>详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 根据物流信息列表动态生成表格内容 -->
+        <tr th:each="order : ${sentOrders}">
+          <td th:text="${order.recname}"></td>
+          <td th:text="${order.destination}"></td>
+          <td th:text="${order.esttime}"></td>
+          <td th:text="${order.state}"></td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderModal"
+                    data-id="${order.id}" data-recname="${order.recname}" data-sendname="${order.sendname}"
+                    data-destination="${order.destination}" data-esttime="${order.esttime}" data-state="${order.state}">
+              查看详情
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- 模态框 -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">订单详情</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>订单编号：</strong><span id="orderNo" th:text="${order.id}"></span></p>
+        <p><strong>收件人：</strong><span id="recName"></span></p>
+        <p><strong>发件人：</strong><span id="sendName"></span></p>
+        <p><strong>收货地址：</strong><span id="destination"></span></p>
+        <p><strong>预计时间：</strong><span id="estTime"></span></p>
+        <p><strong>当前状态：</strong><span id="state"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 当模态框被展示时，将订单详情填充到模态框中
+  $('#orderModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // 触发模态框的按钮
+    var orderNo = button.data('id'); // 订单编号
+    var recName = button.data('recname'); // 收件人
+    var sendName = button.data('sendname'); // 发件人
+    var destination = button.data('destination'); // 收货地址
+    var estTime = button.data('esttime'); // 预计时间
+    var state = button.data('state'); // 当前状态
+
+    // 将订单详情填充到模态框中
+    var modal = $(this);
+    modal.find('#orderNo').text(orderNo);
+    modal.find('#recName').text(recName);
+    modal.find('#sendName').text(sendName);
+    modal.find('#destination').text(destination);
+    modal.find('#estTime').text(estTime);
+    modal.find('#state').text(state);
+  });
+</script>
+
+</body>
+</html>

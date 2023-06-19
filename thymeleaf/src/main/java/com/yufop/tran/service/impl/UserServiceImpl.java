@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
             UserExample userExample = new UserExample();
             userExample.createCriteria().andPasswordEqualTo(password).andEmailEqualTo(email);
             List<User> users =userMapper.selectByExample(userExample);
-            System.out.println(users.get(0).getPhone());
             if(users!=null){
                 if(users.size()==1) {return users.get(0);}
                 else {return null;}

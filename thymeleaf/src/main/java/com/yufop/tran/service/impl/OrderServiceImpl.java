@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int add_Order(Order order) {
 
-
+        order.setState("待签收");
         return orderMapper.insertSelective(order);
 
     }

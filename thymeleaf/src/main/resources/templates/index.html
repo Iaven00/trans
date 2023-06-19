@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    /*居中显示*/
+    .login-box {
+      margin: 0 auto;
+      margin-top: 150px;
+      width: 400px;
+      height: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #888888;
+      padding: 20px;
+    }
+
+    /*输入框样式*/
+    input[type=text], input[type=password] {
+      width: 70%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    /*登录按钮样式*/
+    input[type=submit] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      float: right;
+    }
+
+    /*取消按钮样式*/
+    input[type=reset] {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      float: right;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="login-box">
+
+  <div id="darkbannerwrap">
+    <span style="color: green; font-size: 16px;
+          font-family: 楷体"
+          th:text="${msg}"
+          th:if="${not #strings.isEmpty(msg)}">
+    </span>
+  </div>
+
+  <h2>Fish&shipping物流管理系统</h2>
+  <form th:action="@{/user/login}" method="post">
+    <label for="username"><b>邮箱/手机号</b></label>
+    <input type="text" placeholder="请输入手机号" name="username" required>
+
+    <label for="password"><b>密码</b></label>
+    <input type="password" placeholder="请输入密码" name="password" required>
+
+    <div style="overflow: hidden;">
+      <input type="reset" value="Cancel">
+      <input type="submit" value="Login">
+    </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,9 +1,6 @@
 package com.yufop.tran;
 
-import com.yufop.tran.mapper.UserMapper;
 import com.yufop.tran.pojo.table.Order;
-import com.yufop.tran.pojo.table.UserExample;
-import com.yufop.tran.service.MailService;
 import com.yufop.tran.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
