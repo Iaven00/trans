@@ -160,28 +160,28 @@ public class OrderController {
 
     /**
      * 根据时间顺序获取该订单的所有记录
-     * @param ordid
+     * @param orderid
      * @return
      */
     @GetMapping("/get_records")
     @ResponseBody
-    public List<Records> get_records(int ordid){
+    public List<Records> get_records(int orderid){
 
-        return recordService.getRecList(ordid);
+        return recordService.getRecList(orderid);
     }
 
 
     /**
      * 接收包裹，对订单状态的更新
      * 以及对records的更新
-     * @param ordid
+     * @param orderid
      * @return
      */
     @PostMapping("/receive")
     @ResponseBody
-    public int receive(int ordid){
+    public int receive(int orderid){
 
-        if(orderservice.update_state(ordid,FINISH)>0&&recordService.insert(ordid,FINISH)>0){
+        if(orderservice.update_state(orderid,FINISH)>0&&recordService.insert(orderid,FINISH)>0){
             return 1;
         }
         return 0;
@@ -205,6 +205,13 @@ public class OrderController {
     @ResponseBody
     public List<Order> selectByrp(String phone){
         return orderservice.listByrp(phone);
+    }
+
+
+    @PostMapping("/insertRecords")
+    @ResponseBody
+    public int insertRec(int orderid,String content){
+        return recordService.insertBycontent(orderid,content);
     }
 
 }

@@ -47,4 +47,13 @@ public class RecordServiceImpl implements RecordService {
         records.setTime(new Date());
         return recordsMapper.insertSelective(records);
     }
+
+    @Override
+    public int insertBycontent(int ordid, String content) {
+        Records records = new Records();
+        records.setOrderid(ordid);
+        records.setContent(content);
+        records.setTime(new Date());
+        return recordsMapper.insertSelective(records);
+    }
 }

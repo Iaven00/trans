@@ -17,5 +17,7 @@ public interface RecordService {
 
 
 
+    //
+    int insertBycontent(int ordid,String content);
 
 }
