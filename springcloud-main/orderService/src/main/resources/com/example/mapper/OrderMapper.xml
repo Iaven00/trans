@@ -89,7 +89,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -100,7 +100,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -114,7 +114,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.pojo.Order">
-    insert into order (id, transunitid, userid, 
+    insert into `order` (id, transunitid, userid,
       createtime, setout, destination, 
       type, esttime, state, 
       weight, sendphone, recphone, 
@@ -130,7 +130,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.pojo.Order">
-    insert into order
+    insert into `order`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -245,13 +245,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.example.pojo.OrderExample" resultType="java.lang.Long">
-    select count(*) from order
+    select count(*) from `order`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order
+    update `order`
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -313,7 +313,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order
+    update `order`
     set id = #{record.id,jdbcType=INTEGER},
       transunitid = #{record.transunitid,jdbcType=INTEGER},
       userid = #{record.userid,jdbcType=INTEGER},
@@ -337,7 +337,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.pojo.Order">
-    update order
+    update `order`
     <set>
       <if test="transunitid != null">
         transunitid = #{transunitid,jdbcType=INTEGER},
@@ -394,7 +394,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.pojo.Order">
-    update order
+    update `order`
     set transunitid = #{transunitid,jdbcType=INTEGER},
       userid = #{userid,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},

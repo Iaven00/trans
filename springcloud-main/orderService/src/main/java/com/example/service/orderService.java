@@ -34,5 +34,7 @@ public interface orderService {
 
     int delete_bill(int orderid);
 
+    //更新transunitid
+    int update_trans(int transid,int ordid);
 
 }

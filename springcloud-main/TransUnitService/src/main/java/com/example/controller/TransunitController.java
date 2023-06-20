@@ -3,6 +3,7 @@ package com.example.controller;
 
 import com.example.pojo.Transunit;
 import com.example.service.Transunitservice;
+import com.example.utils.Returnobj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class TransunitController {
     Transunitservice transunitservice;
 
     @GetMapping("/morethanrest")
-    public List<Transunit> list_morethanrest(int rest){
+    public List<Returnobj<Transunit>> list_morethanrest(int rest){
         return transunitservice.list_morethanrest(rest);
     }
 

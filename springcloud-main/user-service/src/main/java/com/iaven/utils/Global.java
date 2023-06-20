@@ -10,9 +10,4 @@ public class Global {
     public static final int FIND = 101; //找回
 
 
-    public static final String Unshipped = "U";
-    public static final String Shipped = "S";
-    public static final String FINISH = "F";
-    public static final String DELE = "D";
-
 }

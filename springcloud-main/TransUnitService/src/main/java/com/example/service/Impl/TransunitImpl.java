@@ -45,13 +45,15 @@ public class TransunitImpl implements Transunitservice {
 
         for(int i=0;i<transunits.size();i++){
             List<Transunit> transunits2 = new ArrayList<>();
-            for(int j=0;j<transunits1.size();j++){
+            for(int j=0;j<transunits1.size();){
                 if(transunits1.get(j).getCompanyid().equals(transunits.get(i).getCompanyid()) ){
                     transunits2.add(transunits1.get(j));
                     transunits1.remove(j);
+                    continue;
                 }
+                j++;
             }
-            Returnobj<Transunit> obj = new Returnobj<>(companyMapper.selectByPrimaryKey(i).getName(),transunits2);
+            Returnobj<Transunit> obj = new Returnobj<>(companyMapper.selectByPrimaryKey(transunits.get(i).getCompanyid()).getName(),transunits2);
             returnobjs.add(obj);
         }
         return returnobjs;

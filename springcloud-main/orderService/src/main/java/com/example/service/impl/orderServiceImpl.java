@@ -5,9 +5,12 @@ import com.example.pojo.Order;
 import com.example.pojo.OrderExample;
 import com.example.service.orderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+@Service
 public class orderServiceImpl implements orderService {
 
 
@@ -86,6 +89,15 @@ public class orderServiceImpl implements orderService {
         orderExample.createCriteria().andIdEqualTo(orderid);
         Order order = new Order();
         order.setState("2");
+        return orderMapper.updateByExampleSelective(order,orderExample);
+    }
+
+    @Override
+    public int update_trans(int transid,int orderId) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria().andIdEqualTo(orderId);
+        Order order = new Order();
+        order.setTransunitid(transid);
         return orderMapper.updateByExampleSelective(order,orderExample);
     }
 

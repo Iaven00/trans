@@ -14,7 +14,7 @@ public class Returnobj<T> {
 
 
     public Returnobj(String name , List<T> tList){
-        this.name = name;
+        name = "";
         lists = tList;
     }
 

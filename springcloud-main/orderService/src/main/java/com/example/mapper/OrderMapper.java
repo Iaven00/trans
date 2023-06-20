@@ -3,8 +3,13 @@ package com.example.mapper;
 import com.example.pojo.Order;
 import com.example.pojo.OrderExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
 public interface OrderMapper {
     long countByExample(OrderExample example);
 

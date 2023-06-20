@@ -19,10 +19,6 @@ class TransUnitServiceApplicationTests {
 
     @Test
     void contextLoads() {
-        List<Transunit> transunits = transunitservice.list_morethanrest(5);
-        for(int i = 0;i<transunits.size();i++){
-            System.out.println(transunits.get(i).getCompanyid());
-        }
 
     }
 

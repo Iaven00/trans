@@ -3,11 +3,17 @@ package com.example.controller;
 
 
 import com.example.pojo.Order;
+import com.example.pojo.Records;
+import com.example.service.RecordService;
+import com.example.service.TransunitFeign;
 import com.example.service.orderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.utils.Global.FINISH;
+import static com.example.utils.Global.Shipped;
 
 
 @RestController
@@ -17,6 +23,12 @@ public class OrderController {
 
     @Autowired
     orderService orderservice;
+
+    @Autowired
+    TransunitFeign transunitFeign;
+
+    @Autowired
+    RecordService recordService;
 
 
     /**
@@ -119,7 +131,61 @@ public class OrderController {
     }
 
 
+    /**
+     * 物流员分配包裹
+     * @param transunitid
+     * @param orderid
+     * @param rest
+     * @return
+     */
+    @PostMapping("/allocation")
+    @ResponseBody
+    public int allocation(Integer transunitid,Integer orderid, Integer rest){
 
+
+        if(transunitid<=0 || orderid<=0|| rest<=0){
+            return 0;
+        }
+        if(
+                transunitFeign.updateRest(transunitid,rest)>0 &&
+                orderservice.update_trans(transunitid,orderid)>0 &&
+                orderservice.update_state(orderid,Shipped) > 0 &&
+                recordService.insert(orderid,Shipped) > 0
+        ){
+            return 1;
+        }
+        return 0;
+
+    }
+
+    /**
+     * 根据时间顺序获取该订单的所有记录
+     * @param ordid
+     * @return
+     */
+    @GetMapping("/get_records")
+    @ResponseBody
+    public List<Records> get_records(int ordid){
+
+        return recordService.getRecList(ordid);
+    }
+
+
+    /**
+     * 接收包裹，对订单状态的更新
+     * 以及对records的更新
+     * @param ordid
+     * @return
+     */
+    @PostMapping("/receive")
+    @ResponseBody
+    public int receive(int ordid){
+
+        if(orderservice.update_state(ordid,FINISH)>0&&recordService.insert(ordid,FINISH)>0){
+            return 1;
+        }
+        return 0;
+    }
 
 
 }
