@@ -101,4 +101,23 @@ public class orderServiceImpl implements orderService {
         return orderMapper.updateByExampleSelective(order,orderExample);
     }
 
+    @Override
+    public List<Order> list_all() {
+        return orderMapper.selectByExample(null);
+    }
+
+    @Override
+    public List<Order> listBysp(String phone) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria().andSendphoneEqualTo(phone);
+        return orderMapper.selectByExample(orderExample);
+    }
+
+    @Override
+    public List<Order> listByrp(String p) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.createCriteria().andRecphoneEqualTo(p);
+        return orderMapper.selectByExample(orderExample);
+    }
+
 }

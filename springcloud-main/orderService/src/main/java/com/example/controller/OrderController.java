@@ -187,5 +187,24 @@ public class OrderController {
         return 0;
     }
 
+    @GetMapping("/selectAll")
+    @ResponseBody
+    public List<Order> selectall(){
+        return orderservice.list_all();
+    }
+
+
+    @GetMapping("/selectBysp")
+    @ResponseBody
+    public List<Order> selectsp(String phone){
+        return orderservice.listBysp(phone);
+    }
+
+
+    @GetMapping("/selectByrp")
+    @ResponseBody
+    public List<Order> selectByrp(String phone){
+        return orderservice.listByrp(phone);
+    }
 
 }

@@ -37,4 +37,11 @@ public interface orderService {
     //更新transunitid
     int update_trans(int transid,int ordid);
 
+
+    List<Order> list_all();
+
+    List<Order> listBysp(String p);
+
+    List<Order> listByrp(String p);
+
 }
