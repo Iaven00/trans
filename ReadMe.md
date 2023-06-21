@@ -17,13 +17,13 @@
 
 ##### 我们Git仓库的结构如下：
 
-**|--shipping-font** 		&emsp;&emsp;[第2、3、4次作业的Vue框架下的前端文件]  
+**|--shipping-font** 		&emsp;&emsp;&emsp; &emsp;[第2、3、4次作业的Vue框架下的前端文件]  
 
-**|--springcloud-main** 	&emsp;&emsp;[拆分为云服务的后端 3、4次作业结果]  
+**|--springcloud-main** 	&emsp; &emsp;[拆分为云服务的后端 3、4次作业结果]  
 
-**|--thymeleaf** 			&emsp;&emsp;[基于thymeleaf+springboot+mybatis的物流系统、第一次作业]  
+**|--thymeleaf** 			&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;[基于thymeleaf+springboot+mybatis的物流系统、第一次作业]  
 
-**|--trans**&emsp;&emsp;[重构Vue+springboot+mybatis的物流系统、第二次作业]  
+**|--trans** &emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;[重构Vue+springboot+mybatis的物流系统、第二次作业]  
 
-**|--四次报告文档汇总**&emsp;&emsp;[如题，主要包含基础系统设计与考察点体现]  
+**|--四次报告文档汇总**&emsp; &emsp;&emsp;[如题，主要包含基础系统设计与考察点体现]  
 
