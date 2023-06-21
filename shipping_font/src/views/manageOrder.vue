@@ -92,6 +92,11 @@
                         type="success"
                         @click="openDialog(scope.$index, scope.row)">发货分配</el-button>
                     <el-button
+                        v-if="scope.row.state === '待签收'"
+                        size="mini"
+                        type="warning"
+                        @click="recieve(scope.$index, scope.row)">签收</el-button>
+                    <el-button
                         size="mini"
                         @click="handleEdit(scope.$index, scope.row)">详情</el-button>
                   </template>
@@ -103,14 +108,13 @@
 
 <!--        弹出框1-->
         <div>
-          <el-button type="primary" @click="openDialog">选择物流公司</el-button>
           <el-dialog
               title="选择物流公司"
               :visible.sync="dialogVisible"
               :close-on-click-modal="false"
           >
             <div class="company-list">
-              <el-card v-for="(company, index) in companies" :key="index" @click="selectCompany(company)">
+              <el-card v-for="(company, index) in companies" :key="index" @click.native="selectCompany(index)">
                 <div class="company-logo">
 <!--                  <img src="company.logo" alt="公司logo" />-->
                   <img :src="company.logo"  alt="公司logo" style="height: 150px;object-fit: cover;" >
@@ -121,9 +125,30 @@
           </el-dialog>
         </div>
 
+        <!--        弹出框3-->
+        <div>
+          <el-dialog
+              title="选择运输单位"
+              :visible.sync="UnitVisible"
+              :close-on-click-modal="false"
+          >
+            <div class="company-list">
+              <el-card v-for="(unit, index) in nowUnit" :key="index" @click.native="selectUnit(unit,index)">
+                <div class="company-logo">
+                  <!--                  <img src="company.logo" alt="公司logo" />-->
+                  <img :src="unit.logo"  alt="公司logo" style="height: 150px;object-fit: cover;" >
+                </div>
+                <div class="company-name">{{ unit.name }}</div>
+                <div class="company-name">可用运力{{ unit.rest }}/{{ unit.total }}</div>
+                <el-progress :percentage="unit.percent" status="success">
+                </el-progress>
+              </el-card>
+            </div>
+          </el-dialog>
+        </div>
+
 <!--        弹出框2 展示进度-->
         <div>
-          <el-button type="primary" @click="openProgress">查看运输进度</el-button>
           <el-dialog
               title="运输进度"
               :visible.sync="progressVisible"
@@ -136,7 +161,7 @@
               <div style="width: 100%;justify-content: start">
                 <el-input v-model="newStep" style="margin: 3rem;width: 15rem" placeholder="请输入新的运输节点" />
                 <el-button type="primary" @click="addStep">添加</el-button>
-                <el-button type="success" @click="addStep">确认到达</el-button>
+                <el-button type="success" @click="toDeli">确认到达</el-button>
               </div>
               <div>
 
@@ -164,7 +189,10 @@ export default {
   },
   data(){
     return {
+      UnitVisible:false,
+      nowUnit:[],
       progressVisible: false,
+      nowIndex:0,
       transportProgress: [
         { title: '发货' },
         { title: '装车' },
@@ -269,6 +297,7 @@ export default {
           type:'陆运',
           state:'待签收',
         }],
+      tranUnit:[],
       rec_tableData: [
         {
           sendname:'禹浩男喵',
@@ -351,36 +380,131 @@ export default {
   created() {
     this.user = JSON.parse(window.localStorage.getItem("user"));
     this.token= JSON.parse(window.localStorage.getItem("token"));
-    this.getSend();
-    this.getRec();
     this.getAll();
   },
   methods: {
+    selectUnit(unit,index){
+      let id=this.all_tableData[this.nowIndex].id
+      console.log("selectid: "+id)
+      let transid=this.nowUnit[index].transunitid
+      let _this=this
+      axios
+          .post("http://127.0.0.1:8710/order/allocation?&transunitid="+transid +"&orderid="+id+"&rest="+this.all_tableData[this.nowIndex].weight, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            _this.$message({
+              message: '分配成功！',
+              type: 'success'
+            });
+            _this.$router.go(0)
+          })
+    },
+    recieve(index,row){
+      console.log(("recieved"+this.all_tableData[index].id))
+     let  _this=this
+      this.$alert('确认签收吗？', '签收', {
+        confirmButtonText: '确定',
+        callback: action => {
+          axios
+              .post("http://127.0.0.1:8710/order/receive?&orderid="+this.all_tableData[index].id, {
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              })
+              .then(function (ressponse) {
+                _this.$message({
+                  message: '签收成功！',
+                  type: 'success'
+                });
+              })
+          _this.$router.go(0)
+        }
+      });
+
+    },
+    getSteps(orderid){
+      let _this=this
+      this.transportProgress=[]
+      axios
+          .get("http://127.0.0.1:8710/order/get_records?&orderid="+orderid, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            for(let i=0;i<ressponse.data.length;i++){
+              let temp={title:ressponse.data[i].content}
+              _this.transportProgress.push(temp)
+            }
+          })
+          this.activeStep = this.transportProgress.length;
+    },
+    toDeli(){
+      console.log("deli"+this.all_tableData[this.nowIndex].id)
+      let _this=this
+      axios
+          .post("http://127.0.0.1:8710/order/toDeli?&orderid="+this.all_tableData[this.nowIndex].id, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            _this.$router.go(0)
+          })
+
+      this.progressVisible = false;
+    },
     openProgress(index,row) {
       this.progressVisible = true;
+      this.nowIndex=index;
+      this.getSteps(this.all_tableData[index].id)
+
     },
     addStep() {
       if (this.newStep) {
+        axios
+            .post("http://127.0.0.1:8710/order/insertRecords?&orderid="+this.all_tableData[this.nowIndex].id+"&content="+this.newStep, {
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            })
+            .then(function (ressponse) {
+            })
         this.transportProgress.push({ title: this.newStep });
         this.newStep = '';
-        this.activeStep = this.transportProgress.length - 1;
+        this.activeStep = this.transportProgress.length;
       }
     },
     openDialog(index,row) {
-      console.log(index)
+      console.log("now:"+this.all_tableData[index].id)
+      this.nowIndex=index
       // 从后端获取公司列表数据
       // 这里假设获取的数据格式为 [{ name: '公司1', logo: 'logo1.png' }, { name: '公司2', logo: 'logo2.png' }]
-      this.companies = [
-        { name: '交大物流', logo: 'https://636c-cloud1-8gc6ijvn24a36d79-1318402435.tcb.qcloud.la/appSource/bjtu.jpg?sign=80ef6386a463431bb89aedd32013970d&t=1687165095' },
-        { name: '公司2', logo: 'logo2.png' },
-      ];
+      let _this=this
+      this.companies=[]
+      axios
+          .get("http://127.0.0.1:8710/tran/morethanrest?&rest="+this.all_tableData[index].weight, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          })
+          .then(function (ressponse) {
+            for(let i=0;i<ressponse.data.length;i++){
+              console.log(ressponse.data)
+              _this.tranUnit=ressponse.data;
+              let temp={name:ressponse.data[i].name,logo: 'https://636c-cloud1-8gc6ijvn24a36d79-1318402435.tcb.qcloud.la/appSource/bjtu.jpg?sign=80ef6386a463431bb89aedd32013970d&t=1687165095'}
+              _this.companies.push(temp)
+            }
+          })
       this.dialogVisible = true;
     },
-    selectCompany(company) {
-      this.selectedCompany = company;
+    selectCompany(index) {
+      console.log(index)
+      this.nowUnit=[]
+      for(let i =0;i<this.tranUnit[index].list.length;i++){
+        let temp=this.tranUnit[index].list[i]
+        if(temp.name.search("冷链")!=-1){
+          temp.logo="https://636c-cloud1-8gc6ijvn24a36d79-1318402435.tcb.qcloud.la/appSource/cold.png?sign=48851685684aee0682ff886589e65928&t=1687253649"
+        }else{
+          temp.logo="https://636c-cloud1-8gc6ijvn24a36d79-1318402435.tcb.qcloud.la/appSource/carat.png?sign=34045a010af4e49f5f9ae6068c711f22&t=1687253660"
+        }
+        temp.percent=parseInt(temp.rest)/parseInt(temp.total)*100
+        this.nowUnit.push(temp)
+      }
       this.dialogVisible = false;
-      // 将选中的公司传递给父组件或做其他处理
-      this.$emit('select', company);
+      this.UnitVisible =true
+
     },
     ensureState(){
       if(this.tempState!=''){
@@ -487,7 +611,7 @@ export default {
       this.all_tableData=[]
       console.log(this.user)
       axios
-          .get("http://localhost:8088/order/selectAll", {
+          .get("http://127.0.0.1:8710/order/selectAll", {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
           })
           .then(function (ressponse) {
@@ -596,7 +720,7 @@ export default {
 .el-card {
   margin: 10px;
   width: 200px;
-  height: 200px;
+  height: auto;
   cursor: pointer;
 }
 .company-logo {
@@ -608,6 +732,7 @@ export default {
 .company-name {
   font-size: 16px;
   text-align: center;
+  font-weight: bolder;
   margin-top: 15px;
 }
 

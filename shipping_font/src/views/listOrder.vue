@@ -79,11 +79,6 @@
                     <el-button
                         size="mini"
                         @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-                    <el-button
-                        v-if="scope.row.state === '待签收'"
-                        size="mini"
-                        type="success"
-                        @click="handleDelete(scope.$index, scope.row)">签收</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -160,8 +155,8 @@
                     <el-button
                         v-if="scope.row.state === '待签收'"
                         size="mini"
-                        type="success"
-                        @click="handleStatus(scope.$index, scope.row)">签收</el-button>
+                        type="warning"
+                        @click="recieve(scope.$index, scope.row)">签收</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -333,12 +328,31 @@ export default {
     // this.getAll();
   },
   methods:{
+    recieve(index,row){
+      let  _this=this
+      this.$alert('确认签收吗？', '签收', {
+        confirmButtonText: '确定',
+        callback: action => {
+          axios
+              .post("http://127.0.0.1:8710/order/receive?&orderid="+this.rec_tableData[index].id, {
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              })
+              .then(function (ressponse) {
+                _this.$message({
+                  message: '签收成功！',
+                  type: 'success'
+                });
+              })
+        }
+      });
+      this.$router.go(0)
+    },
     getSend(){
       var _this=this;
       this.send_tableData=[]
       console.log(this.user)
       axios
-          .get("http://localhost:8088/order/selectBysp?&phone="+ this.user.phone, {
+          .get("http://127.0.0.1:8710/order/selectBysp?&phone="+ this.user.phone, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
           })
           .then(function (ressponse) {
@@ -350,7 +364,7 @@ export default {
       var _this=this;
       this.rec_tableData=[]
       axios
-          .get("http://localhost:8088/order/selectByrp?&phone="+ this.user.phone, {
+          .get("http://127.0.0.1:8710/order/selectByrp?&phone="+ this.user.phone, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
           })
           .then(function (ressponse) {

@@ -31,37 +31,37 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        ServerHttpResponse response = exchange.getResponse();
-        //2.判断当前的请求是否为登录，如果是，直接放行
-        if(request.getURI().getPath().contains("/login")||request.getURI().getPath().contains("/mail")||request.getURI().getPath().contains("/test")){
-            //放行
-            System.out.println("登录放行");
-            return chain.filter(exchange);
-        }
-        HttpHeaders headers = request.getHeaders();
-        String jwtToken = headers.getFirst("token");
-        System.out.println(jwtToken);
-        //4.判断当前令牌是否存在
-        if(jwtToken==null){
-            //如果不存在，向客户端返回错误提示信息
-            System.out.println("缺少验证信息");
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            return response.setComplete();
-        }
-        //5.如果令牌存在，解析jwt令牌，判断该令牌是否合法，如果不合法，则向客户端返回错误信息
-        Future<Boolean> future = executorService.submit(() ->jwtApiservice.check(jwtToken));
-        boolean permitted = false;
-        try {
-            permitted = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        if(!permitted){
-            System.out.println("验证信息错误");
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            return response.setComplete();
-        }
+//        ServerHttpRequest request = exchange.getRequest();
+//        ServerHttpResponse response = exchange.getResponse();
+//        //2.判断当前的请求是否为登录，如果是，直接放行
+//        if(request.getURI().getPath().contains("/login")||request.getURI().getPath().contains("/mail")||request.getURI().getPath().contains("/test")){
+//            //放行
+//            System.out.println("登录放行");
+//            return chain.filter(exchange);
+//        }
+//        HttpHeaders headers = request.getHeaders();
+//        String jwtToken = headers.getFirst("token");
+//        System.out.println(jwtToken);
+//        //4.判断当前令牌是否存在
+//        if(jwtToken==null){
+//            //如果不存在，向客户端返回错误提示信息
+//            System.out.println("缺少验证信息");
+//            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+//            return response.setComplete();
+//        }
+//        //5.如果令牌存在，解析jwt令牌，判断该令牌是否合法，如果不合法，则向客户端返回错误信息
+//        Future<Boolean> future = executorService.submit(() ->jwtApiservice.check(jwtToken));
+//        boolean permitted = false;
+//        try {
+//            permitted = future.get();
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        if(!permitted){
+//            System.out.println("验证信息错误");
+//            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+//            return response.setComplete();
+//        }
         //6.放行
         return chain.filter(exchange);
     }

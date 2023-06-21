@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.utils.Global.FINISH;
-import static com.example.utils.Global.Shipped;
+import static com.example.utils.Global.*;
 
 
 @RestController
@@ -182,6 +181,16 @@ public class OrderController {
     public int receive(int orderid){
 
         if(orderservice.update_state(orderid,FINISH)>0&&recordService.insert(orderid,FINISH)>0){
+            return 1;
+        }
+        return 0;
+    }
+
+
+    @PostMapping("/toDeli")
+    @ResponseBody
+    public int toDeli(int orderid){
+        if(orderservice.update_state(orderid,Delivered)>0&&recordService.insert(orderid,Delivered)>0){
             return 1;
         }
         return 0;

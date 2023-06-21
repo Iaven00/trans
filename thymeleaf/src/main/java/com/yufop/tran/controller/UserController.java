@@ -5,6 +5,8 @@ import com.yufop.tran.pojo.table.User;
 import com.yufop.tran.service.UserService;
 import com.yufop.tran.util.ReturnObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,13 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        // 清除session
+        session.invalidate();
+        // 重定向到登录页面
+        return "redirect:/";
+    }
 
     @PostMapping("/login")
     public String processLogin(@RequestParam("username") String username,
@@ -66,5 +74,7 @@ public class UserController {
     public int token_check(){
         return SUCCESS;
     }
+
+
 
 }

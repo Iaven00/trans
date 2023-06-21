@@ -31,7 +31,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="/manageOrder"><i class="el-icon-location"></i>全部订单</el-menu-item>
-        <el-menu-item index="1-2"><i class="el-icon-location"></i>待发货</el-menu-item>
+<!--        <el-menu-item index="1-2"><i class="el-icon-location"></i>待发货</el-menu-item>-->
       </el-menu-item-group>
     </el-submenu>
     <el-menu-item index="3" v-if="user.identity==1" @click="curpage=3">

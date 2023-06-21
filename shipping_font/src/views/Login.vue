@@ -83,7 +83,7 @@ export default{
           type: "primary",
         });
         axios
-            .get("http://localhost:8088/mail/code?&email="+ this.reg.email, {
+            .get("http://127.0.0.1:8710/account/user/sendcode?&email="+ this.reg.email, {
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
             })
             .then(function (ressponse) {
@@ -152,7 +152,7 @@ export default{
       if(self.form.username != "" && self.form.email != "" && self.form.password != ""){
         self.$axios({
           method:'post',
-          url: 'http://127.0.0.1:10520/api/user/add',
+          url: 'http://127.0.0.1:8710/account/user/register',
           data: {
             username: self.form.username,
             email: self.form.email,

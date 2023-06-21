@@ -327,7 +327,7 @@ export default {
           format.append("sendaddress",this.ruleForm.address)
           format.append("recaddress",this.ruleForm.recaddress)
           axios
-              .post("http://localhost:8088/order/addOrder", format , {
+              .post("http://127.0.0.1:8710/order/submit_order",format , {
                 headers: { "Content-Type": "application/x-www-form-urlencoded",
                   "token":this.token
                 },
@@ -346,45 +346,6 @@ export default {
 
       })
 
-    },
-
-    getSend(){
-      var _this=this;
-      this.send_tableData=[]
-      console.log(this.user)
-      axios
-          .get("http://localhost:8088/order/selectBysp?&phone="+ this.user.phone, {
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          })
-          .then(function (ressponse) {
-            _this.send_tableData=ressponse.data
-          })
-      // console.log(this.send_tableData)
-    },
-    getAll(){
-      var _this=this;
-      this.all_tableData=[]
-      console.log(this.user)
-      axios
-          .get("http://localhost:8088/order/selectAll", {
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          })
-          .then(function (ressponse) {
-            _this.all_tableData=ressponse.data
-          })
-      // console.log(this.send_tableData)
-    },
-
-    getRec(){
-      var _this=this;
-      this.rec_tableData=[]
-      axios
-          .get("http://localhost:8088/order/selectByrp?&phone="+ this.user.phone, {
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          })
-          .then(function (ressponse) {
-            _this.rec_tableData=ressponse.data;
-          })
     },
 
     logout(){
