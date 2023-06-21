@@ -7,15 +7,8 @@
 ---
 ![我们的header](https://github.com/Iaven00/trans/blob/master/shipping_font/src/assets/shiptitle_white.png)
 
-##### 老师您好，我们的组队成员是：
 
-| 姓名   | 学号     |
-| -------- | ---------- |
-| 禹浩男 | 20231266 |
-| 付柏逢 | 20271006 |
-| 潘明豪 | 20231107 |
-
-##### 我们Git仓库的结构如下：
+## 老师您好， 我们Git仓库的结构如下：
 
 **|--shipping-font** 		&emsp;&emsp;&emsp; &emsp;[第2、3、4次作业的Vue框架下的前端文件]  
 
@@ -26,4 +19,14 @@
 **|--trans** &emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;[重构Vue+springboot+mybatis的物流系统、第二次作业]  
 
 **|--四次报告文档汇总**&emsp; &emsp;&emsp;[如题，主要包含基础系统设计与考察点体现]  
+
+## 我们的组队成员是：
+
+| 姓名   | 学号     |
+| -------- | ---------- |
+| 禹浩男 | 20231266 |
+| 付柏逢 | 20271006 |
+| 潘明豪 | 20231107 |
+
+
 
