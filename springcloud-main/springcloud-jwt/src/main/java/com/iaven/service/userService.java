@@ -16,4 +16,7 @@ public interface userService {
     @RequestMapping(value = "/user/login",method = RequestMethod.POST)
     ReturnObject<User> login(@RequestParam(value = "email")String email, @RequestParam(value = "password")String password);
 
+
+    @RequestMapping(value = "/user/check",method = RequestMethod.GET)
+    boolean check(@RequestParam(value = "name")String name, @RequestParam(value = "id")int id);
 }

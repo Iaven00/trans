@@ -151,6 +151,13 @@ public class UserServiceImpl implements UserService {
             return userMapper.deleteByPrimaryKey(userID);
         }
 
+    @Override
+    public boolean checkUser(String name, int id) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(name).andIdEqualTo(id);
+        List<User> users = userMapper.selectByExample(userExample);
+        return users.size()==1;
+    }
 
 
 }

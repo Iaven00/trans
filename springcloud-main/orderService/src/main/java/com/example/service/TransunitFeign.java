@@ -21,4 +21,6 @@ public interface TransunitFeign {
 
     @RequestMapping(value = "/tran/update_rest",method = RequestMethod.POST)
     int updateRest(@RequestParam(value = "transid")int transid,@RequestParam(value = "rest")int rest);
+
+
 }

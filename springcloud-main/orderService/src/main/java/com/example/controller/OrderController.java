@@ -7,27 +7,36 @@ import com.example.pojo.Records;
 import com.example.service.RecordService;
 import com.example.service.TransunitFeign;
 import com.example.service.orderService;
+import com.example.utils.StreamClient;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 import static com.example.utils.Global.*;
 
-
 @RestController
 @RequestMapping("/order")
+@EnableBinding(StreamClient.class)
 public class OrderController {
 
 
     @Autowired
     orderService orderservice;
 
-    @Autowired
-    TransunitFeign transunitFeign;
 
     @Autowired
     RecordService recordService;
+
+    @Resource
+    StreamClient streamClient;
+
 
 
     /**
@@ -145,8 +154,9 @@ public class OrderController {
         if(transunitid<=0 || orderid<=0|| rest<=0){
             return 0;
         }
+        String mes = ""+transunitid+"%"+rest;
+        streamClient.streamDateOut().send(MessageBuilder.withPayload(mes).build());
         if(
-                transunitFeign.updateRest(transunitid,rest)>0 &&
                 orderservice.update_trans(transunitid,orderid)>0 &&
                 orderservice.update_state(orderid,Shipped) > 0 &&
                 recordService.insert(orderid,Shipped) > 0
@@ -222,5 +232,18 @@ public class OrderController {
     public int insertRec(int orderid,String content){
         return recordService.insertBycontent(orderid,content);
     }
+
+
+
+    @GetMapping("/produce")
+    public void produce(int id,int rest) {
+//        for (int i = 0; i < 100; i++) {
+//            streamClient.streamDateOut().send(MessageBuilder.withPayload("aaaaaa" + i).build());
+//        }
+        String mes = ""+id+"%"+rest;
+        streamClient.streamDateOut().send(MessageBuilder.withPayload(mes).build());
+    }
+
+
 
 }
