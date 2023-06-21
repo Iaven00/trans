@@ -6,9 +6,25 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8700/eureka/
 
+kafka:
+  group: lyq
+
 spring:
   application:
     name: transunitservice
+
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+          zk-nodes: localhost:2181
+          auto-create-topics: true
+      bindings:
+        stream-demo:
+          destination: custom-message-topic
+          content-type: application/json
+          group: ${kafka.group}
 
 
   datasource:

@@ -31,4 +31,7 @@ public interface UserService {
     boolean ifExistUser(Integer id); //wj
     int deleteUser(Integer userID);
 
+
+    boolean checkUser(String name,int id);
+
 }

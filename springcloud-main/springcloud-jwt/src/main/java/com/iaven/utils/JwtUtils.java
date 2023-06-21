@@ -25,7 +25,7 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String createJwt(String username){
+    public String createJwt(String username,int id){
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
         //设置头信息
         HashMap<String, Object> header = new HashMap<>(2);
@@ -35,6 +35,7 @@ public class JwtUtils {
         return JWT.create()
                 .withHeader(header)
                 .withClaim("username",username)
+                .withClaim("id",id)
                 .withExpiresAt(new Date(System.currentTimeMillis()+jwtExpirationMs))
                 .sign(algorithm);
     }

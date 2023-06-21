@@ -42,7 +42,7 @@ public class Authcontroller {
         ReturnObject<User>  user = service.login(email,password);
         // 登录成功写入token
         if(user.getCode().compareTo("S") == 0){
-            user.setCode(jwtUtils.createJwt(user.getObject().getUsername()));
+            user.setCode(jwtUtils.createJwt(user.getObject().getUsername(),user.getObject().getId()));
         }
         return user;
     }
@@ -74,11 +74,13 @@ public class Authcontroller {
             System.out.println("calimmap is null !");
             return false;
         }
-        Claim claim = claimmap.get("username");
-        if(claim==null) {
-            return false;
+        Claim claim1 = claimmap.get("username");
+        Claim claim2 = claimmap.get("id");
+        System.out.println("username:"+claim1.asString()+"  id:"+claim2.asInt());
+        if(claim1!=null && claim2!=null && service.check(claim1.asString(),claim2.asInt())) {
+            return true;
         }
-        return  true;
+        return  false;
     }
 
 

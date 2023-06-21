@@ -81,6 +81,25 @@ public class UserController {
     }
 
 
+    @GetMapping("/tesauth")
+    @ResponseBody
+    public String test(){
+        return "this is test for oauth";
+    }
+
+    @GetMapping("/testNoauth")
+    @ResponseBody
+    public String testNoauth(){
+        return "this is test for no oauth";
+    }
+
+
+    @GetMapping("/check")
+    @ResponseBody
+    public boolean checkuser(String name ,int id){
+        return userService.checkUser(name,id);
+    }
+
 
 
 }
