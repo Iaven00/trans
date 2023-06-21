@@ -5,6 +5,7 @@
   
 ​`2023/6/22 07：03`​​  第三次第四次报告还有未完善部分，主要为图片。整体代码基本已经完成。待今早再次修改。
 ---
+!image[https://github.com/Iaven00/trans/blob/master/shipping_font/src/assets/shiptitle_white.png]
 
 ##### 老师您好，我们的组队成员是：
 
